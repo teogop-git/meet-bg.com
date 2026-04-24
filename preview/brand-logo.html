@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+body { background:#1E1E1E; padding:24px; font-family:var(--font-ui); display:flex; flex-wrap:wrap; gap:32px; align-items:flex-start; }
+.variant { }
+.variant-label { font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#4B4B4B; margin-bottom:12px; }
+
+/* Primary lockup */
+.lockup { display:flex; align-items:center; gap:12px; }
+.lockup img { width:48px; height:48px; }
+.lockup-word { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:500; color:#F7F4EF; letter-spacing:-0.01em; line-height:1; }
+.lockup-word span { color:#C9A24D; }
+
+/* Light background */
+.light-bg { background:#F7F4EF; border-radius:12px; padding:20px 28px; }
+.light-bg .lockup-word { color:#1E1E1E; }
+
+/* Large symbol only */
+.symbol-lg img { width:80px; height:80px; }
+.symbol-sm img { width:32px; height:32px; }
+.symbol-favicon img { width:20px; height:20px; }
+
+/* Wordmark only */
+.wordmark-only { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:400; color:#F7F4EF; letter-spacing:-0.01em; }
+.wordmark-only .hyphen { color:#C9A24D; }
+.wordmark-only-light { color:#1E1E1E; }
+
+/* Country variants */
+.country-badge { display:inline-flex; align-items:center; gap:8px; }
+.country-badge img { width:32px; height:32px; }
+.country-text { font-family:'Cormorant Garamond',serif; color:#F7F4EF; }
+.country-name { font-size:20px; font-weight:500; line-height:1; }
+.country-sub { font-size:12px; font-weight:400; color:#9CA3AF; letter-spacing:0.05em; }
+</style>
+</head>
+<body>
+  <div class="variant">
+    <div class="variant-label">Primary Lockup — Dark BG</div>
+    <div class="lockup">
+      <img src="../assets/logo-symbol-white.svg">
+      <div class="lockup-word">meet<span>-</span>bg</div>
+    </div>
+  </div>
+
+  <div class="variant">
+    <div class="variant-label">Primary Lockup — Light BG</div>
+    <div class="light-bg">
+      <div class="lockup">
+        <img src="../assets/logo-symbol.svg">
+        <div class="lockup-word">meet<span style="color:#C9A24D">-</span>bg</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="variant">
+    <div class="variant-label">Symbol — Large</div>
+    <div class="symbol-lg"><img src="../assets/logo-symbol-white.svg"></div>
+  </div>
+
+  <div class="variant">
+    <div class="variant-label">Symbol — Medium</div>
+    <div><img src="../assets/logo-symbol-white.svg" style="width:48px;height:48px"></div>
+  </div>
+
+  <div class="variant">
+    <div class="variant-label">Symbol — Small / Favicon</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <img src="../assets/logo-symbol-white.svg" style="width:32px;height:32px">
+      <img src="../assets/logo-symbol-white.svg" style="width:20px;height:20px">
+    </div>
+  </div>
+
+  <div class="variant">
+    <div class="variant-label">Wordmark Only</div>
+    <div class="wordmark-only">meet<span class="hyphen">-</span>bg</div>
+  </div>
+
+  <div class="variant">
+    <div class="variant-label" style="color:#9CA3AF">Country Sub-brands</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="country-badge">
+        <img src="../assets/logo-symbol-white.svg" style="width:28px;height:28px">
+        <div class="country-text"><div class="country-name">meet-bg <span style="color:#C9A24D">UK</span></div><div class="country-sub">meet-bg.uk</div></div>
+      </div>
+      <div class="country-badge">
+        <img src="../assets/logo-symbol-white.svg" style="width:28px;height:28px">
+        <div class="country-text"><div class="country-name">meet-bg <span style="color:#C9A24D">DE</span></div><div class="country-sub">meet-bg.de</div></div>
+      </div>
+      <div class="country-badge">
+        <img src="../assets/logo-symbol-white.svg" style="width:28px;height:28px">
+        <div class="country-text"><div class="country-name">meet-bg <span style="color:#C9A24D">US</span></div><div class="country-sub">meet-bg.us</div></div>
+      </div>
+    </div>
+  </div>
+</body></html>

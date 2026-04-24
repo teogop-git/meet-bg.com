@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+body { background:#0D0D0D; padding:24px; font-family:var(--font-ui); }
+.row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.swatch { border-radius:8px; overflow:hidden; width:120px; }
+.swatch-color { height:64px; }
+.swatch-info { background:#1F1F1F; padding:8px; }
+.swatch-name { font-size:11px; font-weight:600; color:white; }
+.swatch-hex  { font-size:10px; color:#6B7280; font-family:monospace; }
+.label { font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#4B4B4B; margin-bottom:8px; }
+</style>
+</head>
+<body>
+<div class="label">App Surfaces</div>
+<div class="row">
+  <div class="swatch"><div class="swatch-color" style="background:#0D0D0D; border:1px solid #333"></div><div class="swatch-info"><div class="swatch-name">App BG</div><div class="swatch-hex">#0D0D0D</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#1F1F1F"></div><div class="swatch-info"><div class="swatch-name">Surface</div><div class="swatch-hex">#1F1F1F</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#2A2A2A"></div><div class="swatch-info"><div class="swatch-name">Surface 2</div><div class="swatch-hex">#2A2A2A</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#333333"></div><div class="swatch-info"><div class="swatch-name">Border</div><div class="swatch-hex">#333333</div></div></div>
+</div>
+<div class="label">Neutrals (dark context)</div>
+<div class="row">
+  <div class="swatch"><div class="swatch-color" style="background:#6B7280"></div><div class="swatch-info"><div class="swatch-name">Neutral 500</div><div class="swatch-hex">#6B7280</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#9CA3AF"></div><div class="swatch-info"><div class="swatch-name">Neutral 400</div><div class="swatch-hex">#9CA3AF</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#D1D5DB"></div><div class="swatch-info"><div class="swatch-name">Neutral 300</div><div class="swatch-hex">#D1D5DB</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:white"></div><div class="swatch-info"><div class="swatch-name">White</div><div class="swatch-hex">#FFFFFF</div></div></div>
+</div>
+<div class="label">Status</div>
+<div class="row">
+  <div class="swatch"><div class="swatch-color" style="background:#22C55E"></div><div class="swatch-info"><div class="swatch-name">Success</div><div class="swatch-hex">#22C55E</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#F59E0B"></div><div class="swatch-info"><div class="swatch-name">Warning</div><div class="swatch-hex">#F59E0B</div></div></div>
+  <div class="swatch"><div class="swatch-color" style="background:#EF4444"></div><div class="swatch-info"><div class="swatch-name">Error</div><div class="swatch-hex">#EF4444</div></div></div>
+</div>
+</body></html>

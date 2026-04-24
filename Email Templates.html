@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meet-BG — Email Templates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #EDEBE6;
+    min-height: 100vh;
+    padding: 48px 32px;
+  }
+  .canvas-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .canvas-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9CA3AF;
+    margin-bottom: 8px;
+  }
+  .canvas-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #1E1E1E;
+  }
+  .templates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .template-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .template-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6B7280;
+    padding-left: 2px;
+  }
+  .email-shadow {
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.14), 0 1px 4px rgba(0,0,0,0.08);
+  }
+  /* ─── EMAIL BODY ─── */
+  .email-root {
+    background: #F7F4EF;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 15px;
+    color: #1E1E1E;
+    line-height: 1.6;
+  }
+  .email-root.dark {
+    background: #111111;
+    color: #F7F4EF;
+  }
+
+  /* Header */
+  .em-header {
+    background: #1E1E1E;
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .em-wordmark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: white;
+    letter-spacing: -0.01em;
+  }
+
+  /* Hero band */
+  .em-hero {
+    background: #1E1E1E;
+    padding: 36px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .em-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 80%, rgba(201,162,77,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .em-hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #C9A24D;
+    margin-bottom: 10px;
+  }
+  .em-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px;
+    font-weight: 400;
+    color: white;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .em-hero-title em {
+    font-style: italic;
+    color: #C9A24D;
+  }
+
+  /* Divider rule */
+  .em-rule {
+    height: 1px;
+    background: #E5E7EB;
+    margin: 0 40px;
+  }
+  .em-rule.dark { background: #2A2A2A; }
+
+  /* Body section */
+  .em-body {
+    padding: 32px 40px;
+    background: #F7F4EF;
+  }
+  .em-root.dark .em-body { background: #0D0D0D; }
+
+  .em-greeting {
+    font-size: 16px;
+    color: #1E1E1E;
+    margin-bottom: 20px;
+  }
+  .dark .em-greeting { color: #F7F4EF; }
+  .em-para {
+    font-size: 14px;
+    color: #4B4B4B;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .dark .em-para { color: #9CA3AF; }
+
+  /* Event detail card */
+  .em-event-card {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .dark .em-event-card { background: #1F1F1F; border-color: #333; }
+  .em-event-banner {
+    background: #1E1E1E;
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .em-event-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: white;
+    line-height: 1.2;
+  }
+  .em-event-badge {
+    background: rgba(201,162,77,0.18);
+    color: #C9A24D;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 99px;
+    border: 1px solid rgba(201,162,77,0.35);
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 3px;
+  }
+  .em-event-details {
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .em-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+  }
+  .em-detail-icon {
+    width: 28px;
+    height: 28px;
+    background: #F7F4EF;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .dark .em-detail-icon { background: #2A2A2A; }
+  .em-detail-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9CA3AF;
+    margin-bottom: 1px;
+    font-weight: 600;
+  }
+  .em-detail-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1E1E1E;
+  }
+  .dark .em-detail-value { color: #F7F4EF; }
+
+  /* Booking ref */
+  .em-ref-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 24px;
+    background: #F7F4EF;
+    border-top: 1px solid #E5E7EB;
+    font-size: 12px;
+  }
+  .dark .em-ref-row { background: #161616; border-color: #2A2A2A; }
+  .em-ref-label { color: #9CA3AF; }
+  .em-ref-code { font-weight: 700; color: #1E1E1E; font-family: 'Cormorant Garamond', serif; font-size: 15px; letter-spacing: 0.06em; }
+  .dark .em-ref-code { color: #C9A24D; }
+
+  /* CTA button */
+  .em-cta-wrap { text-align: center; margin-bottom: 28px; }
+  .em-cta {
+    display: inline-block;
+    background: #1E1E1E;
+    color: white;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+  }
+  .em-cta.gold { background: #C9A24D; color: #1E1E1E; }
+  .em-cta-sub {
+    font-size: 12px;
+    color: #9CA3AF;
+    margin-top: 8px;
+  }
+
+  /* Steps / checklist */
+  .em-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .em-check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: #4B4B4B;
+    line-height: 1.5;
+  }
+  .dark .em-check-item { color: #9CA3AF; }
+  .em-check-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(201,162,77,0.15);
+    border: 1.5px solid #C9A24D;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .em-check-dot svg { display: block; }
+
+  /* Section heading inside body */
+  .em-section-head {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #1E1E1E;
+    margin-bottom: 12px;
+  }
+  .dark .em-section-head { color: white; }
+
+  /* Coordinator strip */
+  .em-coordinator {
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .dark .em-coordinator { background: #1F1F1F; border-color: #333; }
+  .em-coord-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #C9A24D;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1E1E1E;
+    flex-shrink: 0;
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .em-coord-name { font-size: 14px; font-weight: 600; color: #1E1E1E; }
+  .dark .em-coord-name { color: white; }
+  .em-coord-role { font-size: 12px; color: #9CA3AF; margin-top: 1px; }
+
+  /* Reminder countdown */
+  .em-countdown {
+    background: #1E1E1E;
+    border-radius: 10px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+  .em-countdown-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: #C9A24D;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .em-countdown-text-big {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: white;
+    line-height: 1.2;
+  }
+  .em-countdown-text-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 3px;
+  }
+
+  /* Footer */
+  .em-footer {
+    background: #111;
+    padding: 28px 40px;
+    text-align: center;
+  }
+  .em-footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .em-footer-wordmark {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: white;
+  }
+  .em-footer-copy {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    line-height: 1.8;
+  }
+  .em-footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  .em-footer-links a {
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "language": "bg",
+  "eventName": "Bulgarian Dinner at DOMO",
+  "date": "Петък, 25 Април · 19:30",
+  "restaurant": "DOMO, бул. Витоша 8, София",
+  "seats": "12",
+  "price": "20 лв.",
+  "guestName": "Ивелина",
+  "coordinator": "Мартина Колева"
+}/*EDITMODE-END*/;
+
+// ─── SVG Logo ───────────────────────────────────────────────────────────────
+function Logo({ size = 26, color = "#C9A24D" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
+      <path d="M38.5 5.2 A28 28 0 1 1 25.5 5.2" stroke={color} strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M25 21 Q24 30 28.5 33.5 Q30 35.5 32 35.5 Q34 35.5 35.5 33.5 Q40 30 39 21 Z"
+        stroke={color} strokeWidth="1.6" strokeLinejoin="round" fill="none"/>
+      <line x1="32" y1="35.5" x2="32" y2="42" stroke={color} strokeWidth="1.6" strokeLinecap="round"/>
+      <line x1="27" y1="42" x2="37" y2="42" stroke={color} strokeWidth="1.6" strokeLinecap="round"/>
+      <circle cx="32" cy="5.5" r="2.6" fill={color} opacity="0.3"/>
+      <circle cx="51.5" cy="18.5" r="2.6" fill={color}/>
+      <circle cx="51.5" cy="45.5" r="2.6" fill={color}/>
+      <circle cx="32" cy="58.5" r="2.6" fill={color}/>
+      <circle cx="12.5" cy="45.5" r="2.6" fill={color}/>
+      <circle cx="12.5" cy="18.5" r="2.6" fill={color}/>
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+      <path d="M1 4L3.5 6.5L9 1" stroke="#C9A24D" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+// ─── Email Header ─────────────────────────────────────────────────────────
+function EmailHeader() {
+  return (
+    <div className="em-header">
+      <Logo size={26} color="#C9A24D"/>
+      <span className="em-wordmark">meet-bg</span>
+    </div>
+  );
+}
+
+// ─── Email Footer ─────────────────────────────────────────────────────────
+function EmailFooter({ lang }) {
+  const t = lang === 'bg'
+    ? { copy: "© 2025 Meet-BG. Всички права запазени.", unsub: "Отписване", privacy: "Поверителност", terms: "Условия" }
+    : { copy: "© 2025 Meet-BG. All rights reserved.", unsub: "Unsubscribe", privacy: "Privacy", terms: "Terms" };
+  return (
+    <div className="em-footer">
+      <div className="em-footer-logo">
+        <Logo size={20} color="rgba(255,255,255,0.4)"/>
+        <span className="em-footer-wordmark">meet-bg</span>
+      </div>
+      <div className="em-footer-copy">
+        {t.copy}<br/>
+        {lang === 'bg' ? "meet-bg.com · app.meet-bg.com" : "meet-bg.com · app.meet-bg.com"}
+      </div>
+      <div className="em-footer-links">
+        <a href="#">{t.unsub}</a>
+        <a href="#">{t.privacy}</a>
+        <a href="#">{t.terms}</a>
+      </div>
+    </div>
+  );
+}
+
+// ─── Detail Row ───────────────────────────────────────────────────────────
+function DetailRow({ icon, label, value }) {
+  return (
+    <div className="em-detail-row">
+      <div className="em-detail-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A24D" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          {icon}
+        </svg>
+      </div>
+      <div>
+        <div className="em-detail-label">{label}</div>
+        <div className="em-detail-value">{value}</div>
+      </div>
+    </div>
+  );
+}
+
+const CalIcon   = <><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></>;
+const PinIcon   = <><path d="M12 2C8.7 2 6 4.7 6 8c0 5 6 12 6 12s6-7 6-12c0-3.3-2.7-6-6-6z"/><circle cx="12" cy="8" r="2"/></>;
+const UsersIcon = <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></>;
+const EuroIcon  = <><path d="M4 10h12M4 14h12M19 6a7 7 0 1 0 0 12"/></>;
+
+// ─── Confirmation Email ───────────────────────────────────────────────────
+function ConfirmationEmail({ tweaks }) {
+  const { language: lang, eventName, date, restaurant, seats, price, guestName, coordinator } = tweaks;
+  const bg = lang === 'bg';
+
+  const copy = bg ? {
+    eyebrow: "Потвърждение за резервация",
+    heroTitle: <>Резервацията е <em>потвърдена.</em></>,
+    greeting: `Здравей, ${guestName} —`,
+    para: `Твоето място на "${eventName}" е запазено. Очакваме те. По-долу ще намериш всички детайли.`,
+    cardBadge: "Потвърдено",
+    dateLabel: "Дата & Час",
+    placeLabel: "Ресторант",
+    seatsLabel: "Капацитет",
+    priceLabel: "Такса",
+    seatsVal: `${seats} участника`,
+    refLabel: "Номер на резервация",
+    ctaText: "Добави в календара",
+    ctaSub: "или отвори в приложението",
+    whatLabel: "Какво да очакваш",
+    checks: [
+      `Нашият координатор ${coordinator} ще те посрещне при входа.`,
+      "Вечерята е маса за 10–12 души — разнообразни хора с обща история.",
+      "Програма: встъпителен коктейл · основно меню · свободен разговор.",
+      "Анулиране е възможно до 48 ч. преди събитието.",
+    ],
+    footerCTA: "Разгледай предстоящи вечери →",
+  } : {
+    eyebrow: "Booking Confirmation",
+    heroTitle: <>Your seat is <em>confirmed.</em></>,
+    greeting: `Hello, ${guestName} —`,
+    para: `Your place at "${eventName}" is reserved. We look forward to seeing you. All the details are below.`,
+    cardBadge: "Confirmed",
+    dateLabel: "Date & Time",
+    placeLabel: "Restaurant",
+    seatsLabel: "Group size",
+    priceLabel: "Fee",
+    seatsVal: `${seats} guests`,
+    refLabel: "Booking Reference",
+    ctaText: "Add to Calendar",
+    ctaSub: "or open in the app",
+    whatLabel: "What to expect",
+    checks: [
+      `Our coordinator ${coordinator} will meet you at the entrance.`,
+      "Dinner is set for 10–12 people — a diverse table, shared roots.",
+      "Format: welcome drink · set menu · open conversation.",
+      "Cancellation is possible up to 48 h before the event.",
+    ],
+    footerCTA: "Browse upcoming dinners →",
+  };
+
+  return (
+    <div className="email-root">
+      <EmailHeader/>
+      <div className="em-hero">
+        <div className="em-hero-eyebrow">{copy.eyebrow}</div>
+        <div className="em-hero-title">{copy.heroTitle}</div>
+      </div>
+      <div className="em-body">
+        <p className="em-greeting">{copy.greeting}</p>
+        <p className="em-para">{copy.para}</p>
+
+        {/* Event card */}
+        <div className="em-event-card">
+          <div className="em-event-banner">
+            <div className="em-event-name">{eventName}</div>
+            <div className="em-event-badge">{copy.cardBadge}</div>
+          </div>
+          <div className="em-event-details">
+            <DetailRow icon={CalIcon}   label={copy.dateLabel}  value={date}/>
+            <DetailRow icon={PinIcon}   label={copy.placeLabel} value={restaurant}/>
+            <DetailRow icon={UsersIcon} label={copy.seatsLabel} value={copy.seatsVal}/>
+            <DetailRow icon={EuroIcon}  label={copy.priceLabel} value={price}/>
+          </div>
+          <div className="em-ref-row">
+            <span className="em-ref-label">{copy.refLabel}</span>
+            <span className="em-ref-code">MBG-2025-0447</span>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="em-cta-wrap">
+          <a href="#" className="em-cta gold">{copy.ctaText}</a>
+          <div className="em-cta-sub">{copy.ctaSub}</div>
+        </div>
+
+        {/* What to expect */}
+        <div className="em-section-head">{copy.whatLabel}</div>
+        <div className="em-checklist">
+          {copy.checks.map((c, i) => (
+            <div key={i} className="em-check-item">
+              <div className="em-check-dot"><CheckIcon/></div>
+              <span>{c}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Browse link */}
+        <div style={{textAlign:'center',marginTop:8}}>
+          <a href="#" style={{fontSize:13,color:'#C9A24D',textDecoration:'none',fontWeight:500}}>{copy.footerCTA}</a>
+        </div>
+      </div>
+      <EmailFooter lang={lang}/>
+    </div>
+  );
+}
+
+// ─── Reminder Email ───────────────────────────────────────────────────────
+function ReminderEmail({ tweaks }) {
+  const { language: lang, eventName, date, restaurant, seats, price, guestName, coordinator } = tweaks;
+  const bg = lang === 'bg';
+
+  const copy = bg ? {
+    eyebrow: "Напомняне · Утре",
+    heroTitle: <>Утре е <em>твоята вечеря.</em></>,
+    greeting: `Здравей, ${guestName} —`,
+    para: "До вечерята остава само 24 часа. Ето всичко, което трябва да знаеш.",
+    cardBadge: "Утре",
+    dateLabel: "Дата & Час",
+    placeLabel: "Ресторант",
+    seatsLabel: "Капацитет",
+    priceLabel: "Такса",
+    seatsVal: `${seats} участника`,
+    coordLabel: "Твоят координатор",
+    coordSub: "Ще те посрещне при входа",
+    listLabel: "Не забравяй",
+    checks: [
+      "Пристигни 5–10 минути по-рано.",
+      "Таксата вече е платена — не носи нищо допълнително.",
+      "Дрескод: smart casual. Вечеря в ресторант.",
+      "Ако имаш хранителни ограничения — напиши ни сега.",
+    ],
+    mapCTA: "Отвори в Google Maps",
+    appCTA: "Виж в приложението",
+    ctaSub: "Въпроси? Пиши ни директно от приложението.",
+  } : {
+    eyebrow: "Reminder · Tomorrow",
+    heroTitle: <>Your dinner is <em>tomorrow.</em></>,
+    greeting: `Hello, ${guestName} —`,
+    para: "Just 24 hours to go. Here's everything you need for tomorrow night.",
+    cardBadge: "Tomorrow",
+    dateLabel: "Date & Time",
+    placeLabel: "Restaurant",
+    seatsLabel: "Group size",
+    priceLabel: "Fee",
+    seatsVal: `${seats} guests`,
+    coordLabel: "Your Coordinator",
+    coordSub: "Will meet you at the entrance",
+    listLabel: "A few reminders",
+    checks: [
+      "Arrive 5–10 minutes early.",
+      "Your fee is already paid — nothing extra to bring.",
+      "Dress code: smart casual. This is a restaurant dinner.",
+      "Dietary needs? Message us before you arrive.",
+    ],
+    mapCTA: "Open in Google Maps",
+    appCTA: "View in the app",
+    ctaSub: "Questions? Message us directly from the app.",
+  };
+
+  return (
+    <div className="email-root">
+      <EmailHeader/>
+      <div className="em-hero">
+        <div className="em-hero-eyebrow">{copy.eyebrow}</div>
+        <div className="em-hero-title">{copy.heroTitle}</div>
+      </div>
+      <div className="em-body">
+        <p className="em-greeting">{copy.greeting}</p>
+        <p className="em-para">{copy.para}</p>
+
+        {/* Countdown strip */}
+        <div className="em-countdown">
+          <div className="em-countdown-num">24</div>
+          <div>
+            <div className="em-countdown-text-big">{bg ? "часа до вечерята" : "hours to dinner"}</div>
+            <div className="em-countdown-text-sub">{date}</div>
+          </div>
+        </div>
+
+        {/* Event card */}
+        <div className="em-event-card">
+          <div className="em-event-banner">
+            <div className="em-event-name">{eventName}</div>
+            <div className="em-event-badge">{copy.cardBadge}</div>
+          </div>
+          <div className="em-event-details">
+            <DetailRow icon={CalIcon}  label={copy.dateLabel}  value={date}/>
+            <DetailRow icon={PinIcon}  label={copy.placeLabel} value={restaurant}/>
+            <DetailRow icon={UsersIcon} label={copy.seatsLabel} value={copy.seatsVal}/>
+          </div>
+          <div className="em-ref-row">
+            <span className="em-ref-label">{copy.coordLabel}</span>
+            <span className="em-ref-code">{coordinator}</span>
+          </div>
+        </div>
+
+        {/* Coordinator */}
+        <div className="em-coordinator">
+          <div className="em-coord-avatar">МК</div>
+          <div>
+            <div className="em-coord-name">{coordinator}</div>
+            <div className="em-coord-role">{copy.coordSub}</div>
+          </div>
+        </div>
+
+        {/* Checklist */}
+        <div className="em-section-head">{copy.listLabel}</div>
+        <div className="em-checklist">
+          {copy.checks.map((c, i) => (
+            <div key={i} className="em-check-item">
+              <div className="em-check-dot"><CheckIcon/></div>
+              <span>{c}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* CTAs */}
+        <div className="em-cta-wrap" style={{display:'flex',gap:10,justifyContent:'center',flexWrap:'wrap'}}>
+          <a href="#" className="em-cta">{copy.mapCTA}</a>
+          <a href="#" className="em-cta gold">{copy.appCTA}</a>
+        </div>
+        <p style={{textAlign:'center',fontSize:12,color:'#9CA3AF',marginTop:12}}>{copy.ctaSub}</p>
+      </div>
+      <EmailFooter lang={lang}/>
+    </div>
+  );
+}
+
+// ─── App Root ─────────────────────────────────────────────────────────────
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  return (
+    <>
+      <div className="canvas-header">
+        <div className="canvas-label">Meet-BG · Email Templates</div>
+        <div className="canvas-title">Потвърждение & Напомняне</div>
+      </div>
+
+      <div className="templates-grid">
+        <div className="template-wrapper">
+          <div className="template-label">01 — Потвърждение за резервация</div>
+          <div className="email-shadow">
+            <ConfirmationEmail tweaks={t}/>
+          </div>
+        </div>
+        <div className="template-wrapper">
+          <div className="template-label">02 — Напомняне (24ч. преди)</div>
+          <div className="email-shadow">
+            <ReminderEmail tweaks={t}/>
+          </div>
+        </div>
+      </div>
+
+      <TweaksPanel>
+        <TweakSection label="Език / Language"/>
+        <TweakRadio label="Language" value={t.language} options={['bg','en']} onChange={v => setTweak('language', v)}/>
+        <TweakSection label="Гост"/>
+        <TweakText label="Гост" value={t.guestName} onChange={v => setTweak('guestName', v)}/>
+        <TweakText label="Координатор" value={t.coordinator} onChange={v => setTweak('coordinator', v)}/>
+        <TweakSection label="Събитие"/>
+        <TweakText label="Вечеря" value={t.eventName} onChange={v => setTweak('eventName', v)}/>
+        <TweakText label="Дата" value={t.date} onChange={v => setTweak('date', v)}/>
+        <TweakText label="Ресторант" value={t.restaurant} onChange={v => setTweak('restaurant', v)}/>
+        <TweakText label="Места" value={t.seats} onChange={v => setTweak('seats', v)}/>
+        <TweakText label="Цена" value={t.price} onChange={v => setTweak('price', v)}/>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(<App/>);
+</script>
+</body>
+</html>

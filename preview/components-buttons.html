@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+body { background:#F7F4EF; padding:24px 28px; font-family:var(--font-ui); }
+.row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:16px; }
+.label { font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#9CA3AF; margin-bottom:8px; }
+
+/* Marketing buttons */
+.btn { display:inline-flex; align-items:center; gap:8px; padding:12px 24px; border-radius:8px; font-family:var(--font-ui); font-size:14px; font-weight:600; cursor:pointer; border:none; transition:all 200ms ease; text-decoration:none; letter-spacing:0.02em; }
+.btn-primary { background:#1E1E1E; color:white; }
+.btn-primary:hover { background:#2B2B2B; transform:translateY(-1px); box-shadow:0 4px 16px rgba(0,0,0,0.18); }
+.btn-gold { background:#C9A24D; color:#1E1E1E; }
+.btn-gold:hover { background:#A8833A; }
+.btn-outline { background:transparent; color:#1E1E1E; border:1.5px solid #1E1E1E; }
+.btn-outline:hover { background:#1E1E1E; color:white; }
+.btn-ghost { background:transparent; color:#6B7280; border:1.5px solid #D1D5DB; }
+.btn-ghost:hover { border-color:#9CA3AF; color:#1E1E1E; }
+.btn-sm { padding:8px 16px; font-size:13px; border-radius:6px; }
+.btn-lg { padding:16px 32px; font-size:16px; border-radius:10px; }
+
+/* App buttons */
+.app-row { background:#0D0D0D; border-radius:10px; padding:16px 20px; margin-bottom:12px; }
+.app-btn { display:inline-flex; align-items:center; gap:8px; padding:12px 24px; border-radius:8px; font-family:var(--font-ui); font-size:14px; font-weight:600; cursor:pointer; border:none; transition:all 200ms; }
+.app-btn-primary { background:#F47A20; color:white; }
+.app-btn-outline { background:transparent; color:#F47A20; border:1.5px solid #F47A20; }
+.app-btn-ghost { background:#1F1F1F; color:white; border:1.5px solid #333; }
+.app-btn-sm { padding:8px 16px; font-size:13px; border-radius:6px; }
+.btn-disabled { opacity:0.4; pointer-events:none; }
+</style>
+</head>
+<body>
+  <div class="label">Marketing Site — Primary Actions</div>
+  <div class="row">
+    <button class="btn btn-primary">Резервирай място</button>
+    <button class="btn btn-gold">Запиши се за вечеря</button>
+    <button class="btn btn-outline">Научи повече</button>
+    <button class="btn btn-ghost">Виж всички</button>
+  </div>
+  <div class="label">Sizes</div>
+  <div class="row">
+    <button class="btn btn-primary btn-sm">Small</button>
+    <button class="btn btn-primary">Default</button>
+    <button class="btn btn-primary btn-lg">Large</button>
+    <button class="btn btn-primary btn-disabled">Disabled</button>
+  </div>
+
+  <div class="app-row">
+    <div class="label" style="color:#4B4B4B;margin-bottom:12px">App — Dark Mode Actions</div>
+    <div class="row">
+      <button class="app-btn app-btn-primary">Book a Seat</button>
+      <button class="app-btn app-btn-outline">Follow</button>
+      <button class="app-btn app-btn-ghost">Message</button>
+    </div>
+    <div class="row">
+      <button class="app-btn app-btn-primary app-btn-sm">Confirm</button>
+      <button class="app-btn app-btn-outline app-btn-sm">Following ✓</button>
+      <button class="app-btn app-btn-ghost app-btn-sm btn-disabled">Pending</button>
+    </div>
+  </div>
+</body></html>

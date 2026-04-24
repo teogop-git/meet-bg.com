@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meet-BG · Invitation Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #2A2621;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 48px 24px 80px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; margin-bottom: 36px; width: 100%;
+}
+.toolbar-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(255,255,255,0.25);
+}
+.print-btn {
+  background: rgba(201,162,77,0.15); color: #C9A24D;
+  border: 1px solid rgba(201,162,77,0.35); border-radius: 7px;
+  padding: 8px 18px; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+}
+.print-btn:hover { background: rgba(201,162,77,0.25); }
+
+/* ── THE CARD ── */
+/* A5 = 148mm × 210mm. At 96dpi = 559 × 794px */
+.card-wrap {
+  position: relative;
+}
+.card {
+  width: 559px;
+  min-height: 794px;
+  background: #1A1714;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 52px 52px 44px;
+}
+
+/* Subtle background texture — two faint gold gradient orbs */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 340px 260px at 50% -40px, rgba(201,162,77,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 280px 200px at 110% 100%, rgba(201,162,77,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Top thin gold border */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #C9A24D 30%, #C9A24D 70%, transparent);
+}
+
+/* Corner ornaments */
+.corner {
+  position: absolute;
+  width: 24px; height: 24px;
+}
+.corner svg { display: block; }
+.corner-tl { top: 12px; left: 12px; }
+.corner-tr { top: 12px; right: 12px; transform: scaleX(-1); }
+.corner-bl { bottom: 12px; left: 12px; transform: scaleY(-1); }
+.corner-br { bottom: 12px; right: 12px; transform: scale(-1); }
+
+/* Logo area */
+.card-logo-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; margin-bottom: 28px;
+}
+.card-wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px; font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.04em;
+}
+
+/* Eyebrow */
+.card-eyebrow {
+  text-align: center;
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: #C9A24D; margin-bottom: 10px;
+}
+
+/* Gold rule */
+.gold-rule {
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,162,77,0.5) 30%, rgba(201,162,77,0.5) 70%, transparent);
+  margin: 0 auto 28px;
+}
+.gold-rule.short { width: 64px; margin: 16px auto; }
+
+/* Event name */
+.card-event-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px; font-weight: 300;
+  color: white; text-align: center;
+  line-height: 1.1; letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.card-event-name em {
+  font-style: italic; color: #C9A24D;
+}
+
+/* Tagline */
+.card-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px; font-weight: 300; font-style: italic;
+  color: rgba(255,255,255,0.4); text-align: center;
+  margin-bottom: 28px;
+}
+
+/* Details grid */
+.card-details {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px 20px;
+  margin-bottom: 28px;
+}
+.detail-item { text-align: center; }
+.detail-label {
+  font-size: 8.5px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(201,162,77,0.7); margin-bottom: 4px;
+}
+.detail-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px; font-weight: 500;
+  color: white; line-height: 1.3;
+}
+.detail-value-sub {
+  font-size: 10px; color: rgba(255,255,255,0.35);
+  margin-top: 1px; letter-spacing: 0.04em;
+}
+
+/* Description */
+.card-desc {
+  text-align: center;
+  font-size: 11.5px; line-height: 1.75;
+  color: rgba(255,255,255,0.45);
+  max-width: 360px; margin: 0 auto 24px;
+}
+.card-desc strong { color: rgba(255,255,255,0.65); font-weight: 500; }
+
+/* QR section */
+.card-qr-section {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  margin-top: auto; padding-top: 20px;
+}
+.card-qr-frame {
+  background: white; padding: 10px; border-radius: 8px;
+  width: 88px; height: 88px;
+  display: flex; align-items: center; justify-content: center;
+}
+.card-qr-frame canvas { display: block; }
+.card-qr-text {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(255,255,255,0.25);
+  text-align: center;
+}
+.card-qr-url {
+  font-size: 9px; color: rgba(201,162,77,0.5);
+  letter-spacing: 0.04em; text-align: center;
+}
+
+/* Bottom footer */
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 24px; padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.card-footer-left {
+  font-size: 9px; color: rgba(255,255,255,0.2);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.card-footer-right {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.35);
+}
+
+/* Print styles */
+@media print {
+  body { background: white; padding: 0; }
+  .toolbar, .twk-panel { display: none !important; }
+  .card {
+    width: 148mm; min-height: 210mm;
+    border: none; box-shadow: none;
+    page-break-after: always;
+  }
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "eventName": "Bulgarian Dinner",
+  "subtitle": "at DOMO",
+  "date": "Петък, 25 Април 2025",
+  "dateEn": "Friday, 25 April 2025",
+  "time": "19:30",
+  "restaurant": "DOMO",
+  "city": "София, България",
+  "cityEn": "Sofia, Bulgaria",
+  "dresscode": "Smart Casual",
+  "price": "20 лв. / £18 / €17",
+  "reserveUrl": "https://app.meet-bg.com/reserve/mbg-2025-0447",
+  "refCode": "MBG-2025-0447"
+}/*EDITMODE-END*/;
+
+function CornerOrnament() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M2 12 L2 2 L12 2" stroke="#C9A24D" strokeWidth="0.8" strokeOpacity="0.6" fill="none"/>
+      <circle cx="2" cy="2" r="1.5" fill="#C9A24D" fillOpacity="0.5"/>
+    </svg>
+  );
+}
+
+function Logo({ size = 22, color = "#C9A24D", opacity = 1 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none" style={{opacity}}>
+      <path d="M38.5 5.2 A28 28 0 1 1 25.5 5.2" stroke={color} strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M25 21 Q24 30 28.5 33.5 Q30 35.5 32 35.5 Q34 35.5 35.5 33.5 Q40 30 39 21 Z"
+        stroke={color} strokeWidth="1.6" strokeLinejoin="round" fill="none"/>
+      <line x1="32" y1="35.5" x2="32" y2="42" stroke={color} strokeWidth="1.6" strokeLinecap="round"/>
+      <line x1="27" y1="42" x2="37" y2="42" stroke={color} strokeWidth="1.6" strokeLinecap="round"/>
+      <circle cx="32" cy="5.5" r="2.6" fill={color} opacity="0.3"/>
+      <circle cx="51.5" cy="18.5" r="2.6" fill={color}/>
+      <circle cx="51.5" cy="45.5" r="2.6" fill={color}/>
+      <circle cx="32" cy="58.5" r="2.6" fill={color}/>
+      <circle cx="12.5" cy="45.5" r="2.6" fill={color}/>
+      <circle cx="12.5" cy="18.5" r="2.6" fill={color}/>
+    </svg>
+  );
+}
+
+function QRCode({ url, size = 68 }) {
+  const src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(url)}&margin=0&color=1E1E1E&bgcolor=FFFFFF`;
+  return <img src={src} width={size} height={size} alt="QR" style={{display:'block'}}/>;
+}
+
+function InvitationCard({ t }) {
+  const nameParts = t.eventName.split(' ');
+  const lastWord = nameParts.pop();
+  const firstWords = nameParts.join(' ');
+
+  return (
+    <div className="card">
+      {/* Corner ornaments */}
+      <div className="corner corner-tl"><CornerOrnament/></div>
+      <div className="corner corner-tr"><CornerOrnament/></div>
+      <div className="corner corner-bl"><CornerOrnament/></div>
+      <div className="corner corner-br"><CornerOrnament/></div>
+
+      {/* Logo */}
+      <div className="card-logo-row">
+        <Logo size={20} color="#C9A24D"/>
+        <span className="card-wordmark">meet-bg</span>
+      </div>
+
+      {/* Eyebrow */}
+      <div className="card-eyebrow">Покана · Invitation</div>
+
+      <div className="gold-rule"/>
+
+      {/* Event name */}
+      <div className="card-event-name">
+        {firstWords} <em>{lastWord}</em>
+      </div>
+      <div className="card-event-name" style={{fontSize:20, fontWeight:300, marginTop:2}}>
+        {t.subtitle}
+      </div>
+
+      <div className="card-tagline">
+        Вечеря с непознати. Само с правилните.
+      </div>
+
+      {/* Details */}
+      <div className="card-details">
+        <div className="detail-item">
+          <div className="detail-label">Дата · Date</div>
+          <div className="detail-value">{t.date}</div>
+          <div className="detail-value-sub">{t.dateEn}</div>
+        </div>
+        <div className="detail-item">
+          <div className="detail-label">Час · Time</div>
+          <div className="detail-value">{t.time}</div>
+          <div className="detail-value-sub">Вратите се отварят 15 мин. по-рано</div>
+        </div>
+        <div className="detail-item">
+          <div className="detail-label">Ресторант · Venue</div>
+          <div className="detail-value">{t.restaurant}</div>
+          <div className="detail-value-sub">{t.city}</div>
+        </div>
+        <div className="detail-item">
+          <div className="detail-label">Дрескод · Dress</div>
+          <div className="detail-value">{t.dresscode}</div>
+          <div className="detail-value-sub">Вечеря в ресторант</div>
+        </div>
+      </div>
+
+      <div className="gold-rule short"/>
+
+      {/* Description */}
+      <p className="card-desc">
+        Маса за <strong>10–12 души</strong>. Реален разговор. Нови познанства.
+        Таксата покрива координация и резервация —{' '}
+        <strong>{t.price}</strong>.
+        Менюто се поръчва и заплаща директно в ресторанта.
+      </p>
+
+      {/* QR */}
+      <div className="card-qr-section">
+        <div className="card-qr-frame">
+          <QRCode url={t.reserveUrl} size={68}/>
+        </div>
+        <div className="card-qr-text">Сканирай за резервация · Scan to reserve</div>
+        <div className="card-qr-url">{t.reserveUrl}</div>
+      </div>
+
+      {/* Footer */}
+      <div className="card-footer">
+        <span className="card-footer-left">Ref: {t.refCode}</span>
+        <span className="card-footer-right">meet-bg.com</span>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  return (
+    <>
+      <div className="toolbar">
+        <span className="toolbar-label">Meet-BG · Invitation Card · A5</span>
+        <button className="print-btn" onClick={() => window.print()}>Принтирай / Export PDF</button>
+      </div>
+
+      <div className="card-wrap">
+        <InvitationCard t={t}/>
+      </div>
+
+      <TweaksPanel>
+        <TweakSection label="Събитие"/>
+        <TweakText label="Заглавие" value={t.eventName} onChange={v => setTweak('eventName', v)}/>
+        <TweakText label="Подзаглавие" value={t.subtitle} onChange={v => setTweak('subtitle', v)}/>
+        <TweakSection label="Дата & Място"/>
+        <TweakText label="Дата (BG)" value={t.date} onChange={v => setTweak('date', v)}/>
+        <TweakText label="Дата (EN)" value={t.dateEn} onChange={v => setTweak('dateEn', v)}/>
+        <TweakText label="Час" value={t.time} onChange={v => setTweak('time', v)}/>
+        <TweakText label="Ресторант" value={t.restaurant} onChange={v => setTweak('restaurant', v)}/>
+        <TweakText label="Град (BG)" value={t.city} onChange={v => setTweak('city', v)}/>
+        <TweakSection label="Детайли"/>
+        <TweakText label="Дрескод" value={t.dresscode} onChange={v => setTweak('dresscode', v)}/>
+        <TweakText label="Цена" value={t.price} onChange={v => setTweak('price', v)}/>
+        <TweakSection label="QR код"/>
+        <TweakText label="Reserve URL" value={t.reserveUrl} onChange={v => setTweak('reserveUrl', v)}/>
+        <TweakText label="Ref Code" value={t.refCode} onChange={v => setTweak('refCode', v)}/>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(<App/>);
+</script>
+</body>
+</html>

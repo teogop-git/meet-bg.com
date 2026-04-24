@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+body { background:#F7F4EF; padding:20px 24px; font-family:var(--font-ui); }
+.label { font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#9CA3AF; margin-bottom:10px; }
+.row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px; }
+
+/* Event card — marketing */
+.event-card { background:white; border-radius:12px; overflow:hidden; width:200px; box-shadow:0 2px 16px rgba(0,0,0,0.08); transition:transform 200ms, box-shadow 200ms; }
+.event-card:hover { transform:translateY(-2px); box-shadow:0 4px 24px rgba(0,0,0,0.12); }
+.event-img { height:100px; background:linear-gradient(135deg,#1E1E1E 0%,#2B2B2B 100%); display:flex; align-items:center; justify-content:center; color:#C9A24D; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; font-weight:600; }
+.event-body { padding:12px 14px; }
+.event-date { font-size:11px; color:#C9A24D; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:4px; }
+.event-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:500; color:#1E1E1E; line-height:1.3; margin-bottom:6px; }
+.event-meta { font-size:11px; color:#9CA3AF; display:flex; gap:8px; }
+.seats { display:inline-block; background:#F7F4EF; color:#1E1E1E; font-size:10px; font-weight:600; padding:3px 8px; border-radius:99px; margin-top:8px; }
+.seats.low { background:#FEF3C7; color:#92400E; }
+
+/* Person card — app */
+.app-card { background:#1F1F1F; border-radius:12px; padding:14px; width:160px; }
+.app-avatar { width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#F47A20,#D4631A); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:18px; margin-bottom:10px; }
+.app-name { color:white; font-size:14px; font-weight:600; margin-bottom:2px; display:flex; align-items:center; gap:5px; }
+.app-loc { color:#6B7280; font-size:12px; margin-bottom:8px; }
+.app-tags { display:flex; flex-wrap:wrap; gap:4px; }
+.app-tag { background:#2A2A2A; color:#9CA3AF; font-size:10px; padding:3px 8px; border-radius:99px; }
+.verified { color:#4A9EFF; font-size:12px; }
+.follow-btn { margin-top:10px; width:100%; padding:7px; background:#F47A20; border:none; border-radius:6px; color:white; font-size:12px; font-weight:600; cursor:pointer; font-family:var(--font-ui); }
+.follow-btn.following { background:#2A2A2A; color:#F47A20; border:1px solid #F47A20; }
+</style>
+</head>
+<body>
+  <div class="label">Event Cards — Marketing Site</div>
+  <div class="row">
+    <div class="event-card">
+      <div class="event-img">📍 Sofia</div>
+      <div class="event-body">
+        <div class="event-date">Fri, 25 Apr · 19:30</div>
+        <div class="event-title">Bulgarian Dinner at DOMO</div>
+        <div class="event-meta"><span>Sofia</span><span>·</span><span>20 лв.</span></div>
+        <div class="seats low">⚡ 3 seats left</div>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-img">📍 London</div>
+      <div class="event-body">
+        <div class="event-date">Sat, 26 Apr · 20:00</div>
+        <div class="event-title">BG Dinner — Shoreditch</div>
+        <div class="event-meta"><span>London</span><span>·</span><span>£18</span></div>
+        <div class="seats">8 seats left</div>
+      </div>
+    </div>
+    <div class="event-card">
+      <div class="event-img" style="background:linear-gradient(135deg,#0D1B2A,#1E1E1E)">📍 Munich</div>
+      <div class="event-body">
+        <div class="event-date">Thu, 1 May · 19:00</div>
+        <div class="event-title">Bulgarische Nacht</div>
+        <div class="event-meta"><span>Munich</span><span>·</span><span>€17</span></div>
+        <div class="seats">Full — Waitlist</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="label">Person Cards — App (Dark)</div>
+  <div class="row">
+    <div class="app-card">
+      <div class="app-avatar">IP</div>
+      <div class="app-name">Ivan Petrov <span class="verified">✓</span></div>
+      <div class="app-loc">London, UK · 7 dinners</div>
+      <div class="app-tags"><span class="app-tag">Tech</span><span class="app-tag">Wine</span><span class="app-tag">Travel</span></div>
+      <button class="follow-btn">Follow</button>
+    </div>
+    <div class="app-card">
+      <div class="app-avatar" style="background:linear-gradient(135deg,#C9A24D,#A8833A)">EG</div>
+      <div class="app-name">Elena Georgieva <span class="verified">✓</span></div>
+      <div class="app-loc">Munich, DE · 4 dinners</div>
+      <div class="app-tags"><span class="app-tag">Art</span><span class="app-tag">Food</span></div>
+      <button class="follow-btn following">Following ✓</button>
+    </div>
+    <div class="app-card">
+      <div class="app-avatar" style="background:linear-gradient(135deg,#4A9EFF,#0D1B2A)">SD</div>
+      <div class="app-name">Stoyan Dimitrov</div>
+      <div class="app-loc">Chicago, US · 2 dinners</div>
+      <div class="app-tags"><span class="app-tag">Business</span><span class="app-tag">Music</span></div>
+      <button class="follow-btn">Follow</button>
+    </div>
+  </div>
+</body></html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+body { background:#F7F4EF; padding:24px 28px; font-family:var(--font-ui); }
+.label { font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#9CA3AF; margin-bottom:8px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+.field { display:flex; flex-direction:column; gap:6px; }
+.field label { font-size:12px; font-weight:600; color:#1E1E1E; }
+.field input, .field select, .field textarea {
+  padding:10px 14px; border-radius:8px; border:1.5px solid #D1D5DB;
+  font-family:var(--font-ui); font-size:14px; color:#1E1E1E;
+  background:white; outline:none; transition:border-color 200ms;
+  width:100%;
+}
+.field input:focus, .field select:focus { border-color:#C9A24D; box-shadow:0 0 0 3px rgba(201,162,77,0.15); }
+.field input.error { border-color:#EF4444; }
+.field input.success { border-color:#22C55E; }
+.hint { font-size:11px; color:#9CA3AF; }
+.error-msg { font-size:11px; color:#EF4444; }
+
+/* App dark inputs */
+.app-wrap { background:#0D0D0D; border-radius:10px; padding:16px 20px; }
+.app-field { display:flex; flex-direction:column; gap:6px; margin-bottom:12px; }
+.app-field label { font-size:12px; font-weight:600; color:#9CA3AF; }
+.app-field input {
+  padding:12px 14px; border-radius:8px; border:1.5px solid #333;
+  font-family:var(--font-ui); font-size:14px; color:white;
+  background:#1F1F1F; outline:none; transition:border-color 200ms; width:100%;
+}
+.app-field input:focus { border-color:#F47A20; box-shadow:0 0 0 3px rgba(244,122,32,0.15); }
+.app-field input::placeholder { color:#4B4B4B; }
+</style>
+</head>
+<body>
+  <div class="label">Marketing Site — Form Inputs</div>
+  <div class="grid">
+    <div class="field"><label>Имейл адрес</label><input type="email" placeholder="teo@example.com"><div class="hint">Ще получиш потвърждение</div></div>
+    <div class="field"><label>Телефон</label><input type="tel" placeholder="+359 88 …" class="success"></div>
+    <div class="field"><label>Избери вечеря</label><select><option>София — Петък 25 Апр, 19:30</option><option>Лондон — Събота 26 Апр</option></select></div>
+    <div class="field"><label>Брой места</label><input type="number" placeholder="1" class="error"><div class="error-msg">Максимум 2 места на човек</div></div>
+  </div>
+
+  <div class="app-wrap">
+    <div class="label" style="color:#4B4B4B;margin-bottom:12px">App — Dark Mode Inputs</div>
+    <div class="grid">
+      <div class="app-field"><label>First Name</label><input type="text" placeholder="Ivan"></div>
+      <div class="app-field"><label>Last Name</label><input type="text" placeholder="Petrov"></div>
+      <div class="app-field"><label>City</label><input type="text" placeholder="London"></div>
+      <div class="app-field"><label>Phone (for verification)</label><input type="tel" placeholder="+44 7700 900100"></div>
+    </div>
+  </div>
+</body></html>

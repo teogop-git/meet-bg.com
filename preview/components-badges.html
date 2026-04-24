@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+body { background:#F7F4EF; padding:20px 24px; font-family:var(--font-ui); }
+.label { font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#9CA3AF; margin-bottom:8px; }
+.row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
+
+/* Verified badge */
+.verified { display:inline-flex; align-items:center; gap:4px; background:#EFF6FF; color:#4A9EFF; font-size:12px; font-weight:600; padding:4px 10px; border-radius:99px; }
+.verified svg { width:12px; height:12px; }
+
+/* Interest tags */
+.tag { display:inline-block; padding:5px 12px; border-radius:99px; font-size:12px; font-weight:500; }
+.tag-cream { background:#EDE8E0; color:#1E1E1E; }
+.tag-gold  { background:#FBF3E2; color:#A8833A; border:1px solid #C9A24D; }
+.tag-dark  { background:#2A2A2A; color:#9CA3AF; }
+.tag-orange{ background:rgba(244,122,32,0.15); color:#F47A20; }
+.tag-active{ background:#F47A20; color:white; }
+
+/* Status badges */
+.badge { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:99px; font-size:11px; font-weight:600; }
+.badge-green  { background:#DCFCE7; color:#166534; }
+.badge-yellow { background:#FEF9C3; color:#854D0E; }
+.badge-red    { background:#FEE2E2; color:#991B1B; }
+.badge-blue   { background:#DBEAFE; color:#1E40AF; }
+.badge-dot { width:6px; height:6px; border-radius:50%; }
+.dot-green  { background:#22C55E; }
+.dot-yellow { background:#F59E0B; }
+.dot-red    { background:#EF4444; }
+
+/* Dinner count badge */
+.count-badge { display:inline-flex; align-items:center; gap:5px; background:#1E1E1E; color:#C9A24D; padding:5px 12px; border-radius:99px; font-size:12px; font-weight:600; }
+
+/* Notification dot */
+.notif { position:relative; display:inline-block; }
+.notif-dot { position:absolute; top:-3px; right:-3px; width:9px; height:9px; background:#EF4444; border-radius:50%; border:2px solid #F7F4EF; }
+</style>
+</head>
+<body>
+  <div class="label">Verified Badge</div>
+  <div class="row">
+    <span class="verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Verified</span>
+  </div>
+
+  <div class="label">Interest Tags</div>
+  <div class="row">
+    <span class="tag tag-cream">Wine</span>
+    <span class="tag tag-cream">Tech</span>
+    <span class="tag tag-cream">Travel</span>
+    <span class="tag tag-gold">Business</span>
+    <span class="tag tag-gold">Food</span>
+  </div>
+  <div class="row" style="background:#0D0D0D;padding:12px;border-radius:8px">
+    <span class="tag tag-dark">Wine</span>
+    <span class="tag tag-dark">Tech</span>
+    <span class="tag tag-orange">Travel</span>
+    <span class="tag tag-active">Business</span>
+  </div>
+
+  <div class="label">Event Status Badges</div>
+  <div class="row">
+    <span class="badge badge-green"><span class="badge-dot dot-green"></span>Confirmed</span>
+    <span class="badge badge-yellow"><span class="badge-dot dot-yellow"></span>3 seats left</span>
+    <span class="badge badge-red"><span class="badge-dot dot-red"></span>Full</span>
+    <span class="badge badge-blue">Waitlist</span>
+  </div>
+
+  <div class="label">Dinner Count</div>
+  <div class="row">
+    <span class="count-badge">🍷 7 dinners attended</span>
+    <span class="count-badge" style="background:#1F1F1F">🍷 3 dinners attended</span>
+  </div>
+</body></html>

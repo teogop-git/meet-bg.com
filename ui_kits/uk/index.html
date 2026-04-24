@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meet-BG UK — Meet Bulgarians in the United Kingdom</title>
+<link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg">
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--color-cream); color:var(--color-graphite); font-family:var(--font-ui); overflow-x:hidden; }
+
+/* ── NAV ── */
+nav { position:sticky; top:0; z-index:100; background:rgba(247,244,239,0.96); backdrop-filter:blur(10px); border-bottom:1px solid var(--color-cream-dark); height:68px; display:flex; align-items:center; justify-content:space-between; padding:0 48px; }
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.nav-wordmark { font-family:var(--font-display); font-size:21px; font-weight:500; color:var(--color-graphite); letter-spacing:-0.01em; white-space:nowrap; }
+.nav-uk-badge { background:var(--color-graphite); color:var(--color-gold); font-size:11px; font-weight:700; padding:3px 8px; border-radius:5px; letter-spacing:0.06em; }
+.nav-links { display:flex; gap:28px; list-style:none; }
+.nav-links a { text-decoration:none; font-size:14px; font-weight:500; color:var(--color-neutral-500); transition:color 150ms; }
+.nav-links a:hover { color:var(--color-graphite); }
+.nav-links a.active { color:var(--color-graphite); border-bottom:2px solid var(--color-gold); padding-bottom:2px; }
+.nav-right { display:flex; align-items:center; gap:12px; }
+.nav-flag { font-size:20px; }
+.nav-cta { background:var(--color-graphite); color:white; padding:10px 22px; border-radius:8px; font-size:13px; font-weight:600; text-decoration:none; transition:background 150ms; white-space:nowrap; }
+.nav-cta:hover { background:#2B2B2B; }
+
+/* ── HERO ── */
+.hero { background:var(--color-graphite); min-height:92vh; display:grid; grid-template-columns:1fr 1fr; gap:0; position:relative; overflow:hidden; }
+.hero::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 65% 40%, rgba(201,162,77,0.07) 0%, transparent 55%); pointer-events:none; }
+.hero-left { padding:90px 56px 80px 56px; display:flex; flex-direction:column; justify-content:center; }
+.hero-uk-label { display:inline-flex; align-items:center; gap:8px; background:rgba(201,162,77,0.12); border:1px solid rgba(201,162,77,0.25); border-radius:99px; padding:6px 14px; font-size:12px; font-weight:600; color:var(--color-gold); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:28px; width:fit-content; }
+.hero-title { font-family:var(--font-display); font-size:60px; font-weight:300; line-height:1.08; letter-spacing:-0.02em; color:white; margin-bottom:24px; }
+.hero-title em { font-style:italic; color:var(--color-gold); }
+.hero-sub { font-size:17px; line-height:1.75; color:rgba(255,255,255,0.62); max-width:460px; margin-bottom:40px; }
+.hero-actions { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.btn-primary { background:var(--color-gold); color:var(--color-graphite); padding:15px 32px; border-radius:8px; font-size:15px; font-weight:700; text-decoration:none; transition:background 150ms, transform 150ms; }
+.btn-primary:hover { background:var(--color-gold-dark); transform:translateY(-1px); }
+.btn-ghost { color:rgba(255,255,255,0.6); font-size:14px; font-weight:500; text-decoration:none; transition:color 150ms; display:flex; align-items:center; gap:6px; }
+.btn-ghost:hover { color:white; }
+.hero-trust { display:flex; gap:28px; margin-top:48px; padding-top:40px; border-top:1px solid rgba(255,255,255,0.08); }
+.trust-item { }
+.trust-num { font-family:var(--font-display); font-size:34px; font-weight:500; color:var(--color-gold); line-height:1; }
+.trust-label { font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:0.08em; text-transform:uppercase; margin-top:4px; }
+
+/* Hero right — map + events */
+.hero-right { background:rgba(255,255,255,0.03); border-left:1px solid rgba(255,255,255,0.06); display:flex; flex-direction:column; justify-content:center; padding:60px 48px; gap:16px; position:relative; z-index:1; }
+.upcoming-label { font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:4px; }
+.ev-card { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.09); border-radius:14px; overflow:hidden; transition:border-color 200ms, background 200ms; cursor:pointer; }
+.ev-card:hover { background:rgba(255,255,255,0.08); border-color:rgba(201,162,77,0.3); }
+.ev-card-img { height:100px; display:flex; align-items:flex-end; padding:12px 16px; position:relative; }
+.ev-london  { background:linear-gradient(160deg,#0D1B2A 0%,#1A2535 100%); }
+.ev-manchester { background:linear-gradient(160deg,#1A1520 0%,#251A30 100%); }
+.ev-birmingham { background:linear-gradient(160deg,#0F1E15 0%,#1A2E20 100%); }
+.ev-chip { background:rgba(201,162,77,0.85); color:#1E1E1E; font-size:10px; font-weight:700; padding:3px 10px; border-radius:99px; }
+.ev-card-body { padding:14px 16px; }
+.ev-date { font-size:11px; color:var(--color-gold); font-weight:600; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:3px; }
+.ev-name { font-family:var(--font-display); font-size:18px; font-weight:500; color:white; margin-bottom:8px; line-height:1.25; }
+.ev-footer { display:flex; justify-content:space-between; align-items:center; }
+.ev-loc { font-size:12px; color:rgba(255,255,255,0.4); }
+.ev-price { font-size:14px; font-weight:700; color:white; }
+.ev-seats { font-size:11px; font-weight:600; padding:3px 9px; border-radius:99px; }
+.s-ok  { background:rgba(34,197,94,0.15); color:#4ADE80; }
+.s-low { background:rgba(245,158,11,0.15); color:#FCD34D; }
+.s-full{ background:rgba(239,68,68,0.15); color:#F87171; }
+
+/* ── CITIES ── */
+.cities-section { background:white; padding:88px 56px; }
+.cities-top { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:48px; }
+.sec-eyebrow { font-size:12px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--color-gold-dark); margin-bottom:10px; }
+.sec-title { font-family:var(--font-display); font-size:42px; font-weight:500; line-height:1.15; color:var(--color-graphite); }
+.sec-body { font-size:16px; color:var(--color-neutral-500); line-height:1.7; max-width:460px; }
+.cities-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.city-card { border-radius:14px; overflow:hidden; cursor:pointer; position:relative; aspect-ratio:3/4; background:var(--color-graphite); transition:transform 200ms, box-shadow 200ms; }
+.city-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-xl); }
+.city-bg { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:64px; opacity:0.12; }
+.city-gradient { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%); }
+.city-body { position:absolute; bottom:0; left:0; right:0; padding:20px 20px 22px; }
+.city-name { font-family:var(--font-display); font-size:24px; font-weight:500; color:white; margin-bottom:4px; }
+.city-count { font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:10px; }
+.city-next { font-size:12px; color:var(--color-gold); font-weight:600; }
+
+/* ── HOW IT WORKS ── */
+.how-section { background:var(--color-cream-dark); padding:88px 56px; }
+.steps { display:grid; grid-template-columns:repeat(3,1fr); gap:40px; margin-top:52px; position:relative; }
+.steps::before { content:''; position:absolute; top:28px; left:calc(16.6% + 20px); right:calc(16.6% + 20px); height:1px; background:linear-gradient(to right, var(--color-gold), var(--color-gold-dark)); opacity:0.3; }
+.step { text-align:center; }
+.step-circle { width:56px; height:56px; border-radius:50%; background:var(--color-graphite); color:var(--color-gold); font-family:var(--font-display); font-size:20px; font-weight:500; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; border:2px solid rgba(201,162,77,0.3); }
+.step-title { font-family:var(--font-display); font-size:21px; font-weight:500; margin-bottom:10px; }
+.step-text { font-size:14px; color:var(--color-neutral-500); line-height:1.7; }
+
+/* ── WHY UK ── */
+.why-section { padding:88px 56px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.why-items { display:flex; flex-direction:column; gap:32px; }
+.why-item { display:flex; gap:18px; }
+.why-icon-wrap { width:44px; height:44px; border-radius:10px; background:var(--color-cream-dark); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.why-title { font-family:var(--font-display); font-size:20px; font-weight:500; margin-bottom:5px; }
+.why-text { font-size:14px; color:var(--color-neutral-500); line-height:1.65; }
+.why-visual { }
+.testimonial-stack { display:flex; flex-direction:column; gap:16px; }
+.tcard { background:var(--color-graphite); border-radius:14px; padding:24px 26px; border:1px solid rgba(255,255,255,0.05); }
+.tcard-text { font-family:var(--font-display); font-size:17px; font-style:italic; color:rgba(255,255,255,0.85); line-height:1.55; margin-bottom:16px; }
+.tcard-author { display:flex; align-items:center; gap:12px; }
+.tcard-avatar { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; color:var(--color-graphite); }
+.tcard-name { font-size:13px; font-weight:600; color:white; }
+.tcard-loc { font-size:11px; color:rgba(255,255,255,0.4); }
+.tcard-dinners { font-size:11px; color:var(--color-gold); font-weight:600; margin-left:auto; }
+
+/* ── CTA BANNER ── */
+.cta-section { background:var(--color-graphite); padding:88px 56px; text-align:center; position:relative; overflow:hidden; }
+.cta-section::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%, rgba(201,162,77,0.1) 0%, transparent 60%); pointer-events:none; }
+.cta-eyebrow { font-size:12px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--color-gold); margin-bottom:16px; }
+.cta-title { font-family:var(--font-display); font-size:52px; font-weight:300; color:white; line-height:1.15; margin-bottom:16px; letter-spacing:-0.01em; }
+.cta-title em { font-style:italic; color:var(--color-gold); }
+.cta-body { font-size:17px; color:rgba(255,255,255,0.55); max-width:520px; margin:0 auto 40px; line-height:1.7; }
+.cta-actions { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+.btn-cta-primary { background:var(--color-gold); color:var(--color-graphite); padding:16px 36px; border-radius:9px; font-size:16px; font-weight:700; text-decoration:none; transition:background 150ms; }
+.btn-cta-primary:hover { background:var(--color-gold-dark); }
+.btn-cta-outline { border:1.5px solid rgba(255,255,255,0.25); color:rgba(255,255,255,0.7); padding:16px 36px; border-radius:9px; font-size:16px; font-weight:500; text-decoration:none; transition:border-color 150ms, color 150ms; }
+.btn-cta-outline:hover { border-color:rgba(255,255,255,0.5); color:white; }
+.cta-note { font-size:13px; color:rgba(255,255,255,0.25); margin-top:20px; }
+
+/* ── FOOTER ── */
+footer { background:#0A0A0A; padding:52px 56px 32px; }
+.footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:48px; padding-bottom:40px; border-bottom:1px solid rgba(255,255,255,0.07); }
+.footer-brand-name { font-family:var(--font-display); font-size:20px; color:white; font-weight:500; display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+.footer-brand-name span { background:var(--color-graphite); border:1px solid rgba(201,162,77,0.3); color:var(--color-gold); font-size:10px; font-weight:700; padding:2px 7px; border-radius:4px; letter-spacing:0.08em; font-family:var(--font-ui); }
+.footer-desc { font-size:13px; color:rgba(255,255,255,0.35); line-height:1.75; max-width:280px; }
+.footer-col h4 { font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:16px; }
+.footer-col a { display:block; font-size:13px; color:rgba(255,255,255,0.45); text-decoration:none; margin-bottom:10px; transition:color 150ms; }
+.footer-col a:hover { color:var(--color-gold); }
+.footer-bottom { display:flex; justify-content:space-between; align-items:center; padding-top:24px; }
+.footer-copy { font-size:12px; color:rgba(255,255,255,0.2); }
+.footer-legal { display:flex; gap:20px; }
+.footer-legal a { font-size:12px; color:rgba(255,255,255,0.2); text-decoration:none; transition:color 150ms; }
+.footer-legal a:hover { color:rgba(255,255,255,0.5); }
+.footer-other-countries { display:flex; gap:8px; padding-top:24px; flex-wrap:wrap; }
+.other-link { text-decoration:none; font-size:12px; color:rgba(255,255,255,0.3); padding:4px 10px; border-radius:99px; border:1px solid rgba(255,255,255,0.1); transition:all 150ms; }
+.other-link:hover { border-color:rgba(201,162,77,0.4); color:var(--color-gold); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <svg width="30" height="30" viewBox="0 0 64 64" fill="none">
+      <path d="M38.5 5.2 A28 28 0 1 1 25.5 5.2" stroke="#C9A24D" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M25 21 Q24 30 28.5 33.5 Q30 35.5 32 35.5 Q34 35.5 35.5 33.5 Q40 30 39 21 Z" stroke="#C9A24D" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
+      <line x1="32" y1="35.5" x2="32" y2="42" stroke="#C9A24D" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="27" y1="42" x2="37" y2="42" stroke="#C9A24D" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="32" cy="5.5" r="2.6" fill="#C9A24D" opacity="0.3"/>
+      <circle cx="51.5" cy="18.5" r="2.6" fill="#C9A24D"/>
+      <circle cx="51.5" cy="45.5" r="2.6" fill="#C9A24D"/>
+      <circle cx="32" cy="58.5" r="2.6" fill="#C9A24D"/>
+      <circle cx="12.5" cy="45.5" r="2.6" fill="#C9A24D"/>
+      <circle cx="12.5" cy="18.5" r="2.6" fill="#C9A24D"/>
+    </svg>
+    <span class="nav-wordmark">meet-bg</span>
+    <span class="nav-uk-badge">UK</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Dinners</a></li>
+    <li><a href="#">How It Works</a></li>
+    <li><a href="#">Cities</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <span class="nav-flag">🇧🇬</span>
+    <a href="#" class="nav-cta">Book a Seat →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-uk-label">🇬🇧 Bulgarians in the United Kingdom</div>
+    <h1 class="hero-title">Meet Bulgarians<br>in <em>your city.</em></h1>
+    <p class="hero-sub">Curated dinners for Bulgarians living in the UK. Real people, real conversation — in London, Manchester, Birmingham and beyond.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Book a Seat</a>
+      <a href="#" class="btn-ghost">See upcoming dinners →</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-item"><div class="trust-num">4</div><div class="trust-label">UK Cities</div></div>
+      <div class="trust-item"><div class="trust-num">120+</div><div class="trust-label">Dinners held</div></div>
+      <div class="trust-item"><div class="trust-num">1 400+</div><div class="trust-label">Bulgarians met</div></div>
+      <div class="trust-item"><div class="trust-num">£18</div><div class="trust-label">Per person</div></div>
+    </div>
+  </div>
+
+  <!-- Upcoming events panel -->
+  <div class="hero-right">
+    <div class="upcoming-label">Upcoming in the UK</div>
+
+    <div class="ev-card">
+      <div class="ev-card-img ev-london"><span class="ev-chip">📍 London</span></div>
+      <div class="ev-card-body">
+        <div class="ev-date">Sat, 26 Apr · 20:00</div>
+        <div class="ev-name">Bulgarian Dinner — Shoreditch</div>
+        <div class="ev-footer">
+          <span class="ev-loc">London, UK</span>
+          <span class="ev-price">£18</span>
+          <span class="ev-seats s-low">⚡ 3 left</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ev-card">
+      <div class="ev-card-img ev-manchester"><span class="ev-chip">📍 Manchester</span></div>
+      <div class="ev-card-body">
+        <div class="ev-date">Fri, 2 May · 19:30</div>
+        <div class="ev-name">BG Night — Northern Quarter</div>
+        <div class="ev-footer">
+          <span class="ev-loc">Manchester, UK</span>
+          <span class="ev-price">£18</span>
+          <span class="ev-seats s-ok">8 left</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ev-card">
+      <div class="ev-card-img ev-birmingham"><span class="ev-chip">📍 Birmingham</span></div>
+      <div class="ev-card-body">
+        <div class="ev-date">Sat, 10 May · 19:30</div>
+        <div class="ev-name">Bulgarian Gathering — Brum</div>
+        <div class="ev-footer">
+          <span class="ev-loc">Birmingham, UK</span>
+          <span class="ev-price">£18</span>
+          <span class="ev-seats s-ok">10 left</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UK CITIES -->
+<section class="cities-section">
+  <div class="cities-top">
+    <div>
+      <div class="sec-eyebrow">Active Cities</div>
+      <h2 class="sec-title">Find your table<br>across the UK</h2>
+    </div>
+    <p class="sec-body">From London's vibrant Bulgarian community to Manchester's growing expat scene — we host dinners where you are.</p>
+  </div>
+  <div class="cities-grid">
+    <div class="city-card">
+      <div class="city-bg">🏙️</div>
+      <div class="city-gradient"></div>
+      <div class="city-body">
+        <div class="city-name">London</div>
+        <div class="city-count">620+ Bulgarians · 80+ dinners</div>
+        <div class="city-next">Next: Sat 26 Apr →</div>
+      </div>
+    </div>
+    <div class="city-card" style="background:#1A1520">
+      <div class="city-bg">🌆</div>
+      <div class="city-gradient"></div>
+      <div class="city-body">
+        <div class="city-name">Manchester</div>
+        <div class="city-count">280+ Bulgarians · 24+ dinners</div>
+        <div class="city-next">Next: Fri 2 May →</div>
+      </div>
+    </div>
+    <div class="city-card" style="background:#0F1E15">
+      <div class="city-bg">🏗️</div>
+      <div class="city-gradient"></div>
+      <div class="city-body">
+        <div class="city-name">Birmingham</div>
+        <div class="city-count">180+ Bulgarians · 12+ dinners</div>
+        <div class="city-next">Next: Sat 10 May →</div>
+      </div>
+    </div>
+    <div class="city-card" style="background:#1A1008">
+      <div class="city-bg" style="opacity:0.07">🏰</div>
+      <div class="city-gradient"></div>
+      <div class="city-body">
+        <div class="city-name">Edinburgh</div>
+        <div class="city-count">120+ Bulgarians</div>
+        <div class="city-next" style="color:rgba(255,255,255,0.35)">Coming soon</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="sec-eyebrow">How it works</div>
+  <h2 class="sec-title" style="margin-bottom:0">Three steps to your next dinner</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-circle">01</div>
+      <div class="step-title">Choose a dinner</div>
+      <p class="step-text">Browse upcoming dinners in your UK city. See the restaurant, date, and available seats. Each table seats 10–12 people.</p>
+    </div>
+    <div class="step">
+      <div class="step-circle">02</div>
+      <div class="step-title">Register & pay</div>
+      <p class="step-text">Sign up with your real name, verify your phone, and pay £18 securely via Stripe. You'll receive a confirmation instantly.</p>
+    </div>
+    <div class="step">
+      <div class="step-circle">03</div>
+      <div class="step-title">Show up & connect</div>
+      <p class="step-text">Our local coordinator greets you at the door. Relax, share a meal, and meet Bulgarians who live in your city.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY MEET-BG UK -->
+<section class="why-section">
+  <div>
+    <div class="sec-eyebrow" style="margin-bottom:12px">Why Meet-BG UK</div>
+    <h2 class="sec-title" style="margin-bottom:16px">Your local coordinator.<br>Your guaranteed table.</h2>
+    <p style="font-size:16px;color:var(--color-neutral-500);line-height:1.7;margin-bottom:40px">Every dinner has a local coordinator who confirms the restaurant 24 hours ahead and greets your group. No surprises, no closed doors.</p>
+    <div class="why-items">
+      <div class="why-item">
+        <div class="why-icon-wrap">📋</div>
+        <div><div class="why-title">Vetted restaurants</div><p class="why-text">We partner with reliable UK restaurants and confirm every booking before you arrive.</p></div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon-wrap">🔒</div>
+        <div><div class="why-title">Verified profiles only</div><p class="why-text">Every participant uses their real name and a verified phone number. No anonymous attendees.</p></div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon-wrap">🌍</div>
+        <div><div class="why-title">Part of a global network</div><p class="why-text">Your profile works across BG, DE, US and more. Meet Bulgarians wherever you travel.</p></div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon-wrap">💷</div>
+        <div><div class="why-title">Full refund if cancelled</div><p class="why-text">If we ever need to cancel, you get your money back automatically. No questions asked.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="why-visual">
+    <div class="testimonial-stack">
+      <div class="tcard">
+        <p class="tcard-text">"I moved to London two years ago not knowing anyone. After my first Meet-BG dinner, I had five new Bulgarian friends in the city."</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar" style="background:#C9A24D">EP</div>
+          <div><div class="tcard-name">Elena Petrova</div><div class="tcard-loc">London, UK</div></div>
+          <div class="tcard-dinners">🍷 7 dinners</div>
+        </div>
+      </div>
+      <div class="tcard">
+        <p class="tcard-text">"As a Bulgarian in Manchester, I had no idea how many of us are here. This platform changed that completely."</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar" style="background:#F47A20">GD</div>
+          <div><div class="tcard-name">Georgi Dimitrov</div><div class="tcard-loc">Manchester, UK</div></div>
+          <div class="tcard-dinners">🍷 4 dinners</div>
+        </div>
+      </div>
+      <div class="tcard" style="border-color:rgba(201,162,77,0.15)">
+        <p class="tcard-text">"The coordinator made all the difference. Everything was organised, the restaurant was perfect, the people were amazing."</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar" style="background:#4A9EFF">MK</div>
+          <div><div class="tcard-name">Maria Kostadinova</div><div class="tcard-loc">London, UK</div></div>
+          <div class="tcard-dinners">🍷 11 dinners</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-eyebrow">🇬🇧 Meet Bulgarians in the UK</div>
+  <h2 class="cta-title">Your table is<br><em>waiting for you.</em></h2>
+  <p class="cta-body">Join hundreds of Bulgarians who have already found their community in the UK — one dinner at a time.</p>
+  <div class="cta-actions">
+    <a href="#" class="btn-cta-primary">Book a Seat Now</a>
+    <a href="#" class="btn-cta-outline">Browse All Dinners</a>
+  </div>
+  <div class="cta-note">No subscription · Pay per dinner · Full refund if cancelled</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">
+        meet-bg <span>UK</span>
+      </div>
+      <p class="footer-desc">Curated social dinners for Bulgarians living in the United Kingdom. Part of the Meet-BG global network.</p>
+      <div class="footer-other-countries" style="margin-top:20px">
+        <a href="#" class="other-link">🇧🇬 meet-bg.com</a>
+        <a href="#" class="other-link">🇩🇪 meet-bg.de</a>
+        <a href="#" class="other-link">🇺🇸 meet-bg.us</a>
+        <a href="#" class="other-link">📱 app.meet-bg.com</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Dinners</h4>
+      <a href="#">London</a><a href="#">Manchester</a><a href="#">Birmingham</a><a href="#">Edinburgh (soon)</a>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <a href="#">How It Works</a><a href="#">Our Coordinators</a><a href="#">Partner Restaurants</a><a href="#">App</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About Meet-BG</a><a href="#">Contact</a><a href="#">GDPR / Privacy</a><a href="#">Terms</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Meet-BG UK · meet-bg.uk · All rights reserved.</div>
+    <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Cookies</a></div>
+  </div>
+</footer>
+
+</body></html>

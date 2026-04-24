@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meet-BG · PWA Package</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #111;
+  color: #F7F4EF;
+  min-height: 100vh;
+  padding: 56px 48px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Page header ── */
+.page-header { margin-bottom: 56px; }
+.page-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #C9A24D; margin-bottom: 10px; }
+.page-title { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 400; line-height: 1.1; }
+.page-sub { font-size: 14px; color: rgba(255,255,255,0.4); margin-top: 10px; line-height: 1.6; max-width: 540px; }
+
+/* ── Section ── */
+.section { margin-bottom: 64px; }
+.section-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); margin-bottom: 20px;
+  padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.badge {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 99px; background: rgba(201,162,77,0.15);
+  color: #C9A24D; border: 1px solid rgba(201,162,77,0.3);
+}
+
+/* ── Icon grid ── */
+.icon-grid {
+  display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-end;
+}
+.icon-cell {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.icon-cell img {
+  border-radius: 22%;
+  display: block;
+  background: transparent;
+}
+.icon-cell.maskable img { border-radius: 0; }
+.icon-size {
+  font-size: 10px; color: rgba(255,255,255,0.3); font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+/* ── Two-col layout ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+/* ── Manifest card ── */
+.manifest-card {
+  background: #1A1A1A; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; overflow: hidden;
+}
+.manifest-card-head {
+  padding: 16px 20px; background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; gap: 10px;
+}
+.manifest-card-icon {
+  width: 36px; height: 36px; border-radius: 8px; overflow: hidden; flex-shrink: 0;
+}
+.manifest-card-icon img { width: 100%; height: 100%; display: block; }
+.manifest-card-title { font-size: 14px; font-weight: 600; }
+.manifest-card-url { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.manifest-props { padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+.prop-row { display: flex; align-items: flex-start; gap: 12px; font-size: 12px; }
+.prop-key { color: #C9A24D; font-weight: 500; min-width: 110px; flex-shrink: 0; font-family: 'SF Mono', 'Fira Code', monospace; }
+.prop-val { color: rgba(255,255,255,0.6); line-height: 1.5; }
+.prop-val.mono { font-family: 'SF Mono', 'Fira Code', monospace; }
+.prop-val.swatch { display: flex; align-items: center; gap: 6px; }
+.swatch-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.15); }
+
+/* ── Code snippet ── */
+.code-block {
+  background: #0D0D0D; border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px; overflow: hidden;
+}
+.code-block-head {
+  padding: 10px 16px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11px; color: rgba(255,255,255,0.3);
+}
+.code-block pre {
+  padding: 16px; font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 11px; line-height: 1.7; color: rgba(255,255,255,0.7);
+  overflow-x: auto; white-space: pre;
+}
+.code-block code .k  { color: #C9A24D; }  /* key */
+.code-block code .s  { color: #7EC8A0; }  /* string */
+.code-block code .c  { color: rgba(255,255,255,0.25); } /* comment */
+.copy-btn {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5); font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 3px 10px; border-radius: 5px; cursor: pointer;
+  font-family: 'Inter', sans-serif; transition: all 0.15s;
+}
+.copy-btn:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
+
+/* ── Checklist ── */
+.checklist { display: flex; flex-direction: column; gap: 10px; }
+.check-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+.check-dot {
+  width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+  background: rgba(201,162,77,0.15); border: 1.5px solid #C9A24D;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Divider ── */
+hr { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 48px 0; }
+
+/* ── Product tabs ── */
+.tabs { display: flex; gap: 4px; margin-bottom: 28px; }
+.tab {
+  padding: 7px 18px; border-radius: 7px; font-size: 12px; font-weight: 600;
+  cursor: pointer; border: 1px solid transparent; transition: all 0.15s;
+  color: rgba(255,255,255,0.4); background: transparent;
+}
+.tab.active { background: rgba(201,162,77,0.15); color: #C9A24D; border-color: rgba(201,162,77,0.3); }
+.tab:hover:not(.active) { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.05); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="page-eyebrow">Meet-BG · PWA Package</div>
+  <h1 class="page-title">Икони & Манифест</h1>
+  <p class="page-sub">Готов пакет за инсталируемо уеб приложение. Съдържа иконки в 10 размера, два manifest файла и HTML snippet за всеки продукт.</p>
+</div>
+
+<!-- PRODUCT TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('app')">app.meet-bg.com</button>
+  <button class="tab" onclick="switchTab('marketing')">meet-bg.com</button>
+</div>
+
+<!-- APP TAB -->
+<div id="tab-app" class="tab-panel active">
+
+  <div class="section">
+    <div class="section-label">Икони <span class="badge">10 размера + maskable</span></div>
+    <div class="icon-grid" id="icons-app"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">manifest.webmanifest</div>
+    <div class="two-col">
+      <div class="manifest-card">
+        <div class="manifest-card-head">
+          <div class="manifest-card-icon"><img src="app/icons/icon-192.png" alt="icon"></div>
+          <div>
+            <div class="manifest-card-title">meet-bg</div>
+            <div class="manifest-card-url">app.meet-bg.com</div>
+          </div>
+        </div>
+        <div class="manifest-props">
+          <div class="prop-row"><span class="prop-key">name</span><span class="prop-val">"meet-bg"</span></div>
+          <div class="prop-row"><span class="prop-key">display</span><span class="prop-val mono">standalone</span></div>
+          <div class="prop-row"><span class="prop-key">theme_color</span>
+            <span class="prop-val swatch"><span class="swatch-dot" style="background:#0D0D0D"></span>#0D0D0D</span></div>
+          <div class="prop-row"><span class="prop-key">background</span>
+            <span class="prop-val swatch"><span class="swatch-dot" style="background:#0D0D0D"></span>#0D0D0D</span></div>
+          <div class="prop-row"><span class="prop-key">orientation</span><span class="prop-val mono">portrait</span></div>
+          <div class="prop-row"><span class="prop-key">icons</span><span class="prop-val">10 + 1 maskable</span></div>
+          <div class="prop-row"><span class="prop-key">shortcuts</span><span class="prop-val">Вечери, Профил</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-block-head">
+          <span>HTML &lt;head&gt; snippet — app.meet-bg.com</span>
+          <button class="copy-btn" onclick="copyCode('app-snippet')">Copy</button>
+        </div>
+        <pre><code id="app-snippet"><span class="c">&lt;!-- PWA: meet-bg app --&gt;</span>
+<span class="k">&lt;link</span> rel=<span class="s">"manifest"</span>
+      href=<span class="s">"/manifest.webmanifest"</span><span class="k">&gt;</span>
+<span class="k">&lt;meta</span> name=<span class="s">"theme-color"</span>
+      content=<span class="s">"#0D0D0D"</span><span class="k">&gt;</span>
+<span class="k">&lt;meta</span> name=<span class="s">"mobile-web-app-capable"</span>
+      content=<span class="s">"yes"</span><span class="k">&gt;</span>
+<span class="k">&lt;meta</span> name=<span class="s">"apple-mobile-web-app-capable"</span>
+      content=<span class="s">"yes"</span><span class="k">&gt;</span>
+<span class="k">&lt;meta</span> name=<span class="s">"apple-mobile-web-app-status-bar-style"</span>
+      content=<span class="s">"black-translucent"</span><span class="k">&gt;</span>
+<span class="k">&lt;meta</span> name=<span class="s">"apple-mobile-web-app-title"</span>
+      content=<span class="s">"meet-bg"</span><span class="k">&gt;</span>
+<span class="k">&lt;link</span> rel=<span class="s">"apple-touch-icon"</span>
+      href=<span class="s">"/icons/icon-180.png"</span><span class="k">&gt;</span>
+<span class="k">&lt;link</span> rel=<span class="s">"icon"</span> type=<span class="s">"image/png"</span>
+      sizes=<span class="s">"192x192"</span>
+      href=<span class="s">"/icons/icon-192.png"</span><span class="k">&gt;</span></code></pre>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MARKETING TAB -->
+<div id="tab-marketing" class="tab-panel">
+
+  <div class="section">
+    <div class="section-label">Икони <span class="badge">10 размера + maskable</span></div>
+    <div class="icon-grid" id="icons-marketing"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">manifest.webmanifest</div>
+    <div class="two-col">
+      <div class="manifest-card">
+        <div class="manifest-card-head">
+          <div class="manifest-card-icon"><img src="marketing/icons/icon-192.png" alt="icon"></div>
+          <div>
+            <div class="manifest-card-title">meet-bg.com</div>
+            <div class="manifest-card-url">meet-bg.com / meet-bg.uk / .de / .us</div>
+          </div>
+        </div>
+        <div class="manifest-props">
+          <div class="prop-row"><span class="prop-key">name</span><span class="prop-val">"meet-bg.com"</span></div>
+          <div class="prop-row"><span class="prop-key">display</span><span class="prop-val mono">minimal-ui</span></div>
+          <div class="prop-row"><span class="prop-key">theme_color</span>
+            <span class="prop-val swatch"><span class="swatch-dot" style="background:#1E1E1E"></span>#1E1E1E</span></div>
+          <div class="prop-row"><span class="prop-key">background</span>
+            <span class="prop-val swatch"><span class="swatch-dot" style="background:#1E1E1E"></span>#1E1E1E</span></div>
+          <div class="prop-row"><span class="prop-key">orientation</span><span class="prop-val mono">any</span></div>
+          <div class="prop-row"><span class="prop-key">icons</span><span class="prop-val">10 + 1 maskable</span></div>
+        </div>
+      </div>
+      <div class="code-block">
+        <div class="code-block-head">
+          <span>HTML &lt;head&gt; snippet — meet-bg.com</span>
+          <button class="copy-btn" onclick="copyCode('mkt-snippet')">Copy</button>
+        </div>
+        <pre><code id="mkt-snippet"><span class="c">&lt;!-- PWA: meet-bg.com --&gt;</span>
+<span class="k">&lt;link</span> rel=<span class="s">"manifest"</span>
+      href=<span class="s">"/manifest.webmanifest"</span><span class="k">&gt;</span>
+<span class="k">&lt;meta</span> name=<span class="s">"theme-color"</span>
+      content=<span class="s">"#1E1E1E"</span><span class="k">&gt;</span>
+<span class="k">&lt;meta</span> name=<span class="s">"apple-mobile-web-app-capable"</span>
+      content=<span class="s">"yes"</span><span class="k">&gt;</span>
+<span class="k">&lt;meta</span> name=<span class="s">"apple-mobile-web-app-status-bar-style"</span>
+      content=<span class="s">"black-translucent"</span><span class="k">&gt;</span>
+<span class="k">&lt;meta</span> name=<span class="s">"apple-mobile-web-app-title"</span>
+      content=<span class="s">"meet-bg"</span><span class="k">&gt;</span>
+<span class="k">&lt;link</span> rel=<span class="s">"apple-touch-icon"</span>
+      href=<span class="s">"/icons/icon-180.png"</span><span class="k">&gt;</span>
+<span class="k">&lt;link</span> rel=<span class="s">"icon"</span> type=<span class="s">"image/png"</span>
+      sizes=<span class="s">"192x192"</span>
+      href=<span class="s">"/icons/icon-192.png"</span><span class="k">&gt;</span></code></pre>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<hr>
+
+<!-- CHECKLIST -->
+<div class="section">
+  <div class="section-label">Deployment checklist</div>
+  <div class="checklist">
+    <div class="check-item">
+      <div class="check-dot"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C9A24D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span>Качи <code style="font-size:11px;background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:4px">manifest.webmanifest</code> в корена на домейна (напр. <code style="font-size:11px;background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:4px">app.meet-bg.com/manifest.webmanifest</code>).</span>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C9A24D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span>Качи папка <code style="font-size:11px;background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:4px">icons/</code> с всички PNG файлове до манифеста.</span>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C9A24D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span>Постави HTML snippet в <code style="font-size:11px;background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:4px">&lt;head&gt;</code> на всяка страница.</span>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C9A24D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span>Сайтът трябва да се сервира по <strong>HTTPS</strong> — задължително условие за PWA инсталация.</span>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C9A24D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span>Регистрирай Service Worker за offline поддръжка — препоръчваме Workbox.</span>
+    </div>
+    <div class="check-item">
+      <div class="check-dot"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#C9A24D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <span>Провери с Chrome DevTools → Application → Manifest за грешки при зареждане.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function renderIcons(containerId, dir) {
+  const sizes = [72, 96, 128, 144, 152, 180, 192, 384, 512];
+  const container = document.getElementById(containerId);
+  sizes.forEach(sz => {
+    const displaySize = Math.min(sz, 80);
+    const cell = document.createElement('div');
+    cell.className = 'icon-cell';
+    cell.innerHTML = `<img src="${dir}/icon-${sz}.png" width="${displaySize}" height="${displaySize}" alt="${sz}px">
+                      <span class="icon-size">${sz}px</span>`;
+    container.appendChild(cell);
+  });
+  // maskable
+  const maskCell = document.createElement('div');
+  maskCell.className = 'icon-cell maskable';
+  maskCell.innerHTML = `<img src="${dir}/icon-512-maskable.png" width="80" height="80" style="border-radius:50%;overflow:hidden" alt="maskable">
+                        <span class="icon-size">512 maskable</span>`;
+  container.appendChild(maskCell);
+}
+
+renderIcons('icons-app', 'app/icons');
+renderIcons('icons-marketing', 'marketing/icons');
+
+function copyCode(id) {
+  const el = document.getElementById(id);
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  });
+}
+</script>
+</body>
+</html>
