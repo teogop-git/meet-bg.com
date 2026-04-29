@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meet-BG · Coordinator Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #C9A24D; --graphite: #1E1E1E; --cream: #F7F4EF;
+  --border: #E5E7EB; --muted: #6B7280; --surface: #ffffff;
+  --green: #22C55E; --orange: #F47A20; --red: #EF4444; --blue: #3B82F6;
+  --sidebar-w: 220px;
+}
+body { font-family: 'Inter', sans-serif; background: #F3F1EC; color: var(--graphite); height: 100vh; overflow: hidden; -webkit-font-smoothing: antialiased; }
+
+.layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; height: 100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  background: var(--graphite); display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.sb-logo {
+  padding: 20px 20px 16px; display: flex; align-items: center; gap: 9px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.sb-wordmark { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: white; }
+.sb-role { padding: 10px 20px; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.25); border-bottom: 1px solid rgba(255,255,255,0.07); }
+.sb-nav { padding: 12px 10px; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.sb-nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+  border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,0.5); transition: all 0.12s; border: none; background: none; width: 100%; text-align: left;
+}
+.sb-nav-item:hover { color: white; background: rgba(255,255,255,0.07); }
+.sb-nav-item.active { color: white; background: rgba(201,162,77,0.18); }
+.sb-nav-item .nav-icon { width: 16px; text-align: center; font-size: 14px; }
+.sb-nav-badge { margin-left: auto; background: var(--orange); color: white; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; }
+.sb-user {
+  padding: 14px 20px; border-top: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; gap: 10px;
+}
+.sb-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--gold); color: var(--graphite); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; flex-shrink: 0; }
+.sb-user-name { font-size: 13px; font-weight: 600; color: white; }
+.sb-user-city { font-size: 11px; color: rgba(255,255,255,0.35); }
+
+/* ── MAIN ── */
+.main { display: flex; flex-direction: column; overflow: hidden; }
+
+/* Topbar */
+.topbar {
+  background: white; border-bottom: 1px solid var(--border);
+  padding: 0 28px; height: 60px; display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.topbar-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+.btn-primary {
+  background: var(--graphite); color: white; border: none; border-radius: 8px;
+  padding: 8px 18px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background 0.15s;
+}
+.btn-primary:hover { background: #2B2B2B; }
+.btn-outline {
+  background: transparent; color: var(--muted); border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 7px 16px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Content */
+.content { flex: 1; overflow-y: auto; padding: 24px 28px; }
+
+/* Stats row */
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.stat-card {
+  background: white; border-radius: 12px; padding: 16px 20px;
+  border: 1px solid var(--border);
+}
+.stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.stat-value { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 400; color: var(--graphite); line-height: 1; margin-bottom: 4px; }
+.stat-value.gold { color: var(--gold); }
+.stat-sub { font-size: 11px; color: var(--muted); }
+.stat-sub .up { color: var(--green); font-weight: 600; }
+.stat-sub .down { color: var(--red); font-weight: 600; }
+
+/* Two-col */
+.two-col { display: grid; grid-template-columns: 1fr 360px; gap: 20px; }
+
+/* Section card */
+.section-card { background: white; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+.section-card-head {
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.section-card-title { font-size: 13px; font-weight: 600; }
+.section-card-body { }
+
+/* Attendees table */
+.attendee-row {
+  display: grid; grid-template-columns: 32px 1fr auto auto 80px;
+  align-items: center; gap: 12px;
+  padding: 10px 20px; border-bottom: 1px solid #F9F7F3;
+  transition: background 0.1s;
+}
+.attendee-row:last-child { border-bottom: none; }
+.attendee-row:hover { background: #FAFAF8; }
+.att-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--graphite); font-family: 'Cormorant Garamond', serif; flex-shrink: 0; }
+.att-name { font-size: 13px; font-weight: 500; }
+.att-sub { font-size: 11px; color: var(--muted); }
+.att-ref { font-size: 11px; color: var(--muted); font-family: monospace; }
+.att-amount { font-size: 13px; font-weight: 600; text-align: right; }
+.att-status { display: flex; justify-content: flex-end; }
+.status-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 99px;
+}
+.status-confirmed { background: rgba(34,197,94,0.1); color: #16A34A; border: 1px solid rgba(34,197,94,0.2); }
+.status-pending   { background: rgba(245,158,11,0.1); color: #D97706; border: 1px solid rgba(245,158,11,0.2); }
+.status-cancelled { background: rgba(239,68,68,0.1);  color: #DC2626; border: 1px solid rgba(239,68,68,0.2); }
+
+/* Event detail right col */
+.event-detail-card {
+  background: white; border-radius: 12px; border: 1px solid var(--border);
+  overflow: hidden;
+}
+.edc-hero { background: var(--graphite); padding: 20px; }
+.edc-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: white; margin-bottom: 4px; }
+.edc-sub { font-size: 12px; color: rgba(255,255,255,0.4); }
+.edc-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+.edc-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; }
+.edc-icon { width: 28px; height: 28px; background: #F3F1EC; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 13px; }
+.edc-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.edc-val { font-size: 13px; font-weight: 500; color: var(--graphite); }
+
+/* Seat bar */
+.seat-bar-wrap { padding: 0 20px 16px; }
+.seat-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.seat-bar { height: 6px; background: #F0EDE8; border-radius: 99px; overflow: hidden; }
+.seat-bar-fill { height: 100%; background: var(--gold); border-radius: 99px; transition: width 0.5s; }
+
+/* Checklist */
+.coordinator-checks { padding: 0 20px 16px; }
+.check-title { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.check-row { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 6px 0; border-bottom: 1px solid #F9F7F3; }
+.check-row:last-child { border-bottom: none; }
+.check-box {
+  width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--border); background: white; transition: all 0.12s;
+}
+.check-box.done { background: var(--green); border-color: var(--green); }
+.check-box.done::after { content: '✓'; color: white; font-size: 9px; font-weight: 700; }
+.check-text { color: var(--graphite); flex: 1; line-height: 1.4; }
+.check-text.done-text { text-decoration: line-through; color: var(--muted); }
+
+/* Action buttons in event card */
+.edc-actions { padding: 0 20px 16px; display: flex; flex-direction: column; gap: 8px; }
+
+/* Message box */
+.msg-box { padding: 0 20px 16px; }
+.msg-textarea {
+  width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px;
+  font-family: 'Inter', sans-serif; font-size: 12px; resize: none; outline: none;
+  transition: border-color 0.15s; color: var(--graphite); background: #FAFAFA;
+}
+.msg-textarea:focus { border-color: var(--gold); background: white; }
+.msg-send-btn {
+  width: 100%; margin-top: 8px; padding: 9px; background: var(--graphite); color: white;
+  border: none; border-radius: 7px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: background 0.15s;
+}
+.msg-send-btn:hover { background: #2B2B2B; }
+
+/* Upcoming events mini list */
+.upcoming-item {
+  padding: 12px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px; cursor: pointer; transition: background 0.1s;
+}
+.upcoming-item:last-child { border-bottom: none; }
+.upcoming-item:hover { background: #FAFAF8; }
+.upcoming-item.active-ev { background: #FBF8F3; border-left: 3px solid var(--gold); }
+.upev-date { width: 38px; text-align: center; flex-shrink: 0; }
+.upev-day { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--graphite); line-height: 1; }
+.upev-month { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.upev-info { flex: 1; min-width: 0; }
+.upev-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.upev-sub { font-size: 11px; color: var(--muted); }
+.upev-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 99px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+const ATTENDEES = [
+  { name: "Ивелина Петрова",   city: "София",  ref: "MBG-0447-01", amount: "20 лв.", status: "confirmed", initials: "ИП", bg: "#C9A24D" },
+  { name: "Елена Манолова",    city: "София",  ref: "MBG-0447-02", amount: "20 лв.", status: "confirmed", initials: "ЕМ", bg: "#4A9EFF" },
+  { name: "Стефан Димитров",   city: "Пловдив",ref: "MBG-0447-03", amount: "20 лв.", status: "confirmed", initials: "СД", bg: "#F47A20" },
+  { name: "Георги Кирилов",    city: "София",  ref: "MBG-0447-04", amount: "20 лв.", status: "confirmed", initials: "ГК", bg: "#C9A24D" },
+  { name: "Мария Василева",    city: "Варна",  ref: "MBG-0447-05", amount: "20 лв.", status: "confirmed", initials: "МВ", bg: "#22C55E" },
+  { name: "Александър Тодоров",city: "София",  ref: "MBG-0447-06", amount: "20 лв.", status: "pending",   initials: "АТ", bg: "#6B7280" },
+  { name: "Симона Ангелова",   city: "София",  ref: "MBG-0447-07", amount: "20 лв.", status: "confirmed", initials: "СА", bg: "#C9A24D" },
+  { name: "Николай Стоянов",   city: "Бургас", ref: "MBG-0447-08", amount: "20 лв.", status: "confirmed", initials: "НС", bg: "#4A9EFF" },
+  { name: "Красимира Иванова", city: "София",  ref: "MBG-0447-09", amount: "20 лв.", status: "cancelled", initials: "КИ", bg: "#9CA3AF" },
+];
+
+const UPCOMING = [
+  { day: "25", month: "АПР", name: "Bulgarian Dinner at DOMO", sub: "Sofia · 19:30 · 9/12", status: "low", statusLabel: "⚡ 3 места", active: true },
+  { day: "03", month: "МАЙ", name: "BG Dinner — Shoreditch",   sub: "London · 20:00 · 4/12", status: "open", statusLabel: "8 свободни", active: false },
+  { day: "10", month: "МАЙ", name: "Bulgarische Nacht",         sub: "Munich · 19:00 · 12/12", status: "full", statusLabel: "Пълна", active: false },
+];
+
+const NAV_ITEMS = [
+  { icon: "🗓", label: "Моите вечери", badge: null, active: true },
+  { icon: "👥", label: "Участници",    badge: "1",  active: false },
+  { icon: "💬", label: "Съобщения",    badge: "3",  active: false },
+  { icon: "✅", label: "Чеклист",      badge: null, active: false },
+  { icon: "📊", label: "Статистика",   badge: null, active: false },
+];
+
+function Logo() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+      <path d="M38.5 5.2 A28 28 0 1 1 25.5 5.2" stroke="#C9A24D" strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M25 21 Q24 30 28.5 33.5 Q30 35.5 32 35.5 Q34 35.5 35.5 33.5 Q40 30 39 21 Z" stroke="#C9A24D" strokeWidth="1.6" strokeLinejoin="round" fill="none"/>
+      <line x1="32" y1="35.5" x2="32" y2="42" stroke="#C9A24D" strokeWidth="1.6" strokeLinecap="round"/>
+      <line x1="27" y1="42" x2="37" y2="42" stroke="#C9A24D" strokeWidth="1.6" strokeLinecap="round"/>
+      <circle cx="32" cy="5.5" r="2.6" fill="#C9A24D" opacity="0.3"/>
+      <circle cx="51.5" cy="18.5" r="2.6" fill="#C9A24D"/>
+      <circle cx="51.5" cy="45.5" r="2.6" fill="#C9A24D"/>
+      <circle cx="32" cy="58.5" r="2.6" fill="#C9A24D"/>
+      <circle cx="12.5" cy="45.5" r="2.6" fill="#C9A24D"/>
+      <circle cx="12.5" cy="18.5" r="2.6" fill="#C9A24D"/>
+    </svg>
+  );
+}
+
+function StatusBadge({ status, label }) {
+  const cls = { confirmed:'status-confirmed', pending:'status-pending', cancelled:'status-cancelled' }[status];
+  const lbl = label || { confirmed:'Потвърден', pending:'Изчаква', cancelled:'Отказан' }[status];
+  return <span className={`status-badge ${cls}`}>{lbl}</span>;
+}
+
+function App() {
+  const [checks, setChecks] = React.useState([
+    { id:1, text: "Потвърди резервацията в ресторанта (24ч. преди)", done: true },
+    { id:2, text: "Изпрати напомнящ имейл до участниците", done: true },
+    { id:3, text: "Провери алергии и специални изисквания", done: false },
+    { id:4, text: "Потвърди броя на потвърдените гости", done: false },
+    { id:5, text: "Пристигни 20 мин. преди началото", done: false },
+  ]);
+  const [msg, setMsg] = React.useState('');
+  const [sent, setSent] = React.useState(false);
+
+  const toggleCheck = (id) => {
+    setChecks(cs => cs.map(c => c.id === id ? {...c, done: !c.done} : c));
+  };
+
+  const confirmed = ATTENDEES.filter(a => a.status === 'confirmed').length;
+  const total = 12;
+  const pct = Math.round((confirmed / total) * 100);
+
+  return (
+    <div className="layout">
+      {/* SIDEBAR */}
+      <aside className="sidebar">
+        <div className="sb-logo">
+          <Logo/>
+          <span className="sb-wordmark">meet-bg</span>
+        </div>
+        <div className="sb-role">Координатор · София</div>
+        <nav className="sb-nav">
+          {NAV_ITEMS.map((item, i) => (
+            <button key={i} className={`sb-nav-item ${item.active ? 'active' : ''}`}>
+              <span className="nav-icon">{item.icon}</span>
+              {item.label}
+              {item.badge && <span className="sb-nav-badge">{item.badge}</span>}
+            </button>
+          ))}
+        </nav>
+        <div className="sb-user">
+          <div className="sb-avatar">МК</div>
+          <div>
+            <div className="sb-user-name">Мартина Колева</div>
+            <div className="sb-user-city">Координатор · Sofia</div>
+          </div>
+        </div>
+      </aside>
+
+      {/* MAIN */}
+      <div className="main">
+        <div className="topbar">
+          <div className="topbar-title">Моите вечери</div>
+          <div className="topbar-actions">
+            <button className="btn-outline">Изпрати имейл</button>
+            <button className="btn-primary">+ Нова вечеря</button>
+          </div>
+        </div>
+
+        <div className="content">
+          {/* Stats */}
+          <div className="stats-row">
+            <div className="stat-card">
+              <div className="stat-label">Потвърдени</div>
+              <div className="stat-value gold">{confirmed}</div>
+              <div className="stat-sub">от {total} места</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Приходи</div>
+              <div className="stat-value">{confirmed * 20}</div>
+              <div className="stat-sub">лв. тази вечеря</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Рейтинг</div>
+              <div className="stat-value gold">4.8</div>
+              <div className="stat-sub"><span className="up">↑ 0.2</span> спрямо мин. месец</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">Вечери тази година</div>
+              <div className="stat-value">14</div>
+              <div className="stat-sub">142 участника общо</div>
+            </div>
+          </div>
+
+          <div className="two-col">
+            {/* Attendees */}
+            <div style={{display:'flex', flexDirection:'column', gap:20}}>
+              <div className="section-card">
+                <div className="section-card-head">
+                  <span className="section-card-title">Участници — Bulgarian Dinner at DOMO · 25 Апр</span>
+                  <StatusBadge status="confirmed" label="Активна"/>
+                </div>
+                <div className="section-card-body">
+                  {ATTENDEES.map((a, i) => (
+                    <div key={i} className="attendee-row">
+                      <div className="att-avatar" style={{background: a.bg}}>{a.initials}</div>
+                      <div>
+                        <div className="att-name">{a.name}</div>
+                        <div className="att-sub">{a.city}</div>
+                      </div>
+                      <div className="att-ref">{a.ref}</div>
+                      <div className="att-amount">{a.amount}</div>
+                      <div className="att-status"><StatusBadge status={a.status}/></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Upcoming */}
+              <div className="section-card">
+                <div className="section-card-head">
+                  <span className="section-card-title">Предстоящи вечери</span>
+                </div>
+                {UPCOMING.map((ev, i) => (
+                  <div key={i} className={`upcoming-item ${ev.active ? 'active-ev' : ''}`}>
+                    <div className="upev-date">
+                      <div className="upev-day">{ev.day}</div>
+                      <div className="upev-month">{ev.month}</div>
+                    </div>
+                    <div className="upev-info">
+                      <div className="upev-name">{ev.name}</div>
+                      <div className="upev-sub">{ev.sub}</div>
+                    </div>
+                    <span className={`upev-badge status-badge ${ev.status === 'full' ? 'status-cancelled' : ev.status === 'low' ? 'status-pending' : 'status-confirmed'}`}>
+                      {ev.statusLabel}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: Event detail */}
+            <div style={{display:'flex', flexDirection:'column', gap:16}}>
+              <div className="event-detail-card">
+                <div className="edc-hero">
+                  <div className="edc-name">Bulgarian Dinner at DOMO</div>
+                  <div className="edc-sub">Петък, 25 Април 2025 · 19:30</div>
+                </div>
+                <div className="edc-body">
+                  <div className="edc-row">
+                    <div className="edc-icon">📍</div>
+                    <div>
+                      <div className="edc-label">Ресторант</div>
+                      <div className="edc-val">DOMO, бул. Витоша 8, София</div>
+                    </div>
+                  </div>
+                  <div className="edc-row">
+                    <div className="edc-icon">📞</div>
+                    <div>
+                      <div className="edc-label">Контакт ресторант</div>
+                      <div className="edc-val">+359 2 987 6543</div>
+                    </div>
+                  </div>
+                  <div className="edc-row">
+                    <div className="edc-icon">🪑</div>
+                    <div>
+                      <div className="edc-label">Резервация</div>
+                      <div className="edc-val">Маса №7 · {confirmed}/{total} потвърдени</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Seat bar */}
+                <div className="seat-bar-wrap">
+                  <div className="seat-bar-label">
+                    <span>Запълване</span>
+                    <span style={{fontWeight:600, color:'#1E1E1E'}}>{pct}%</span>
+                  </div>
+                  <div className="seat-bar">
+                    <div className="seat-bar-fill" style={{width: `${pct}%`}}/>
+                  </div>
+                </div>
+
+                {/* Checklist */}
+                <div className="coordinator-checks">
+                  <div className="check-title">Координаторски чеклист</div>
+                  {checks.map(c => (
+                    <div key={c.id} className="check-row" onClick={() => toggleCheck(c.id)} style={{cursor:'pointer'}}>
+                      <div className={`check-box ${c.done ? 'done' : ''}`}/>
+                      <span className={`check-text ${c.done ? 'done-text' : ''}`}>{c.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Actions */}
+                <div className="edc-actions">
+                  <button className="btn-primary" style={{width:'100%', padding:10}}>Изпрати напомняне до всички</button>
+                  <button className="btn-outline" style={{width:'100%', padding:9}}>Отвори в Google Maps ↗</button>
+                </div>
+
+                {/* Quick message */}
+                <div className="msg-box">
+                  <textarea
+                    className="msg-textarea" rows={3}
+                    placeholder="Съобщение до участниците..."
+                    value={msg}
+                    onChange={e => { setMsg(e.target.value); setSent(false); }}
+                  />
+                  <button className="msg-send-btn" onClick={() => { setSent(true); setMsg(''); }}>
+                    {sent ? '✓ Изпратено!' : 'Изпрати съобщение'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(<App/>);
+</script>
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meet-BG · Event Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #EDEBE6;
+  min-height: 100vh;
+  padding: 48px 32px 80px;
+  -webkit-font-smoothing: antialiased;
+}
+.canvas {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.canvas-eyebrow {
+  text-align: center;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #9CA3AF; margin-bottom: 6px;
+}
+.canvas-title {
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 400;
+  color: #1E1E1E; margin-bottom: 36px;
+}
+
+/* ── EVENT CARD ── */
+.event-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 40px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.06);
+  display: grid;
+  grid-template-columns: 1fr 360px;
+}
+
+/* Left: main content */
+.ec-left { display: flex; flex-direction: column; }
+
+/* Hero band */
+.ec-hero {
+  background: #1E1E1E;
+  padding: 32px 36px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.ec-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 300px 200px at 100% 0%, rgba(201,162,77,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.ec-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #C9A24D; margin-bottom: 10px;
+}
+.ec-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 300; color: white;
+  line-height: 1.1; letter-spacing: -0.01em; margin-bottom: 6px;
+}
+.ec-name em { font-style: italic; color: #C9A24D; }
+.ec-subtitle { font-size: 14px; color: rgba(255,255,255,0.45); }
+
+/* Status bar */
+.ec-status-bar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 36px;
+  background: #F9F7F3;
+  border-bottom: 1px solid #F0EDE8;
+}
+.status-pill {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 99px;
+}
+.status-pill.open { background: rgba(34,197,94,0.1); color: #16A34A; border: 1px solid rgba(34,197,94,0.25); }
+.status-pill.low  { background: rgba(245,158,11,0.1); color: #D97706; border: 1px solid rgba(245,158,11,0.25); }
+.status-pill.full { background: rgba(239,68,68,0.1);  color: #DC2626; border: 1px solid rgba(239,68,68,0.25); }
+.ec-seats-text { font-size: 12px; color: #6B7280; }
+
+/* Details grid */
+.ec-details {
+  padding: 24px 36px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px;
+  border-bottom: 1px solid #F0EDE8;
+}
+.ec-detail { display: flex; flex-direction: column; gap: 3px; }
+.ec-detail-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: #9CA3AF;
+}
+.ec-detail-value { font-size: 14px; font-weight: 500; color: #1E1E1E; line-height: 1.4; }
+.ec-detail-sub { font-size: 12px; color: #6B7280; margin-top: 1px; }
+
+/* Rating row */
+.ec-rating-row {
+  padding: 16px 36px;
+  display: flex; align-items: center; gap: 16px;
+  border-bottom: 1px solid #F0EDE8;
+}
+.ec-rating-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 400; color: #1E1E1E; line-height: 1;
+}
+.ec-rating-stars { color: #F59E0B; font-size: 18px; letter-spacing: 1px; }
+.ec-rating-count { font-size: 12px; color: #6B7280; margin-top: 2px; }
+.ec-google-badge {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: #6B7280;
+}
+.google-logo { font-size: 13px; font-weight: 700; }
+.g-blue   { color: #4285F4; }
+.g-red    { color: #EA4335; }
+.g-yellow { color: #FBBC04; }
+.g-green  { color: #34A853; }
+
+/* Avatars row */
+.ec-avatars {
+  padding: 16px 36px 20px;
+  display: flex; align-items: center; gap: 12px;
+}
+.avatars-stack { display: flex; }
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid white;
+  background: #C9A24D; color: #1E1E1E;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-left: -8px; font-family: 'Cormorant Garamond', serif;
+}
+.avatar:first-child { margin-left: 0; }
+.avatar.more { background: #1E1E1E; color: rgba(255,255,255,0.7); font-size: 10px; font-family: 'Inter', sans-serif; }
+.ec-avatars-text { font-size: 13px; color: #4B4B4B; line-height: 1.5; }
+.ec-avatars-text strong { font-weight: 600; }
+
+/* ── Right panel ── */
+.ec-right {
+  background: #F9F7F3;
+  border-left: 1px solid #F0EDE8;
+  display: flex; flex-direction: column;
+}
+
+/* Map */
+.ec-map {
+  height: 200px;
+  background: #E8E3DA;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.ec-map iframe {
+  width: 100%; height: 100%;
+  border: none; display: block;
+  filter: saturate(0.7) contrast(1.05);
+}
+.ec-map-overlay {
+  position: absolute; bottom: 10px; right: 10px;
+  background: white; border-radius: 8px; padding: 6px 12px;
+  font-size: 11px; font-weight: 600; color: #1E1E1E;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  cursor: pointer; transition: box-shadow 0.15s;
+  text-decoration: none; display: block;
+}
+.ec-map-overlay:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
+
+/* Action panel */
+.ec-action {
+  padding: 24px 24px 20px;
+  flex: 1;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.ec-price-row {
+  display: flex; align-items: baseline; gap: 6px;
+}
+.ec-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px; font-weight: 400; color: #1E1E1E;
+}
+.ec-price-note { font-size: 12px; color: #6B7280; }
+.ec-reserve-btn {
+  display: block; width: 100%; padding: 14px;
+  background: #1E1E1E; color: white; border: none; border-radius: 10px;
+  font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: background 0.15s; text-align: center; text-decoration: none;
+}
+.ec-reserve-btn:hover { background: #2B2B2B; }
+.ec-reserve-btn.gold { background: #C9A24D; color: #1E1E1E; }
+.ec-reserve-btn.gold:hover { background: #B8913E; }
+.ec-waitlist-btn {
+  display: block; width: 100%; padding: 11px;
+  background: transparent; color: #6B7280;
+  border: 1.5px solid #E5E7EB; border-radius: 10px;
+  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s; text-align: center; text-decoration: none;
+}
+.ec-waitlist-btn:hover { border-color: #C9A24D; color: #C9A24D; }
+
+/* QR section */
+.ec-qr-section {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #F0EDE8;
+  display: flex; align-items: center; gap: 14px;
+}
+.ec-qr-img {
+  width: 72px; height: 72px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: white;
+  padding: 4px;
+  border: 1px solid #E5E7EB;
+}
+.ec-qr-img img { width: 100%; height: 100%; display: block; }
+.ec-qr-text { font-size: 11px; color: #9CA3AF; line-height: 1.6; }
+.ec-qr-text strong { display: block; color: #4B4B4B; font-size: 12px; margin-bottom: 2px; }
+
+/* Reviews strip */
+.ec-reviews {
+  padding: 0 36px 24px;
+}
+.ec-reviews-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9CA3AF; margin-bottom: 12px; }
+.ec-reviews-list { display: flex; flex-direction: column; gap: 10px; }
+.ec-review {
+  background: #F9F7F3; border-radius: 10px; padding: 12px 14px;
+  border: 1px solid #F0EDE8;
+}
+.ec-review-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.ec-review-author { font-size: 12px; font-weight: 600; color: #1E1E1E; }
+.ec-review-stars { color: #F59E0B; font-size: 11px; }
+.ec-review-text { font-size: 12px; color: #6B7280; line-height: 1.6; }
+
+/* Variants row */
+.variants-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.variant-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: #9CA3AF; text-align: center; margin-bottom: 12px;
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "eventName": "Bulgarian Dinner",
+  "venue": "DOMO",
+  "city": "Sofia, Bulgaria",
+  "date": "Петък, 25 Април 2025",
+  "time": "19:30",
+  "price": "€10",
+  "seats": 3,
+  "totalSeats": 12,
+  "rating": 4.7,
+  "reviewCount": 1240,
+  "lat": 42.6977,
+  "lng": 23.3219,
+  "reserveUrl": "https:\/\/app.meet-bg.com\/reserve\/mbg-2025-0447",
+  "variant": "seatsLow"
+}/*EDITMODE-END*/;
+
+const REVIEWS = [
+  { author: "Georgi P.", stars: 5, text: "Страхотна вечеря, перфектно организирана. Запознах се с невероятни хора." },
+  { author: "Elena M.", stars: 5, text: "DOMO беше невероятен избор — качеството на храната е на ниво." },
+  { author: "Ivan K.", stars: 4, text: "Координаторът беше много любезен. Определено ще се върна." },
+];
+
+const AVATARS = [
+  { initials: "ИП", bg: "#C9A24D" },
+  { initials: "ЕМ", bg: "#4A9EFF" },
+  { initials: "СД", bg: "#C9A24D", opacity: 0.6 },
+  { initials: "ГК", bg: "#1E1E1E", color: "white" },
+];
+
+function Stars({ rating, size = 16 }) {
+  return (
+    <span style={{color:'#F59E0B', fontSize: size, letterSpacing:1}}>
+      {'★'.repeat(Math.floor(rating))}
+      {rating % 1 >= 0.5 ? '½' : ''}
+      {'☆'.repeat(5 - Math.ceil(rating))}
+    </span>
+  );
+}
+
+function GoogleBadge() {
+  return (
+    <div className="ec-google-badge">
+      <span>оценка от</span>
+      <span className="google-logo">
+        <span className="g-blue">G</span><span className="g-red">o</span><span className="g-yellow">o</span><span className="g-blue">g</span><span className="g-green">l</span><span className="g-red">e</span>
+      </span>
+    </div>
+  );
+}
+
+function EventCard({ t, showReviews = true }) {
+  const seatsLeft = t.seats;
+  const status = seatsLeft === 0 ? 'full' : seatsLeft <= 3 ? 'low' : 'open';
+  const statusLabel = { full: 'Пълна', low: `⚡ ${seatsLeft} места`, open: `${seatsLeft} свободни` }[status];
+  const statusClass = { full: 'full', low: 'low', open: 'open' }[status];
+  const nameParts = t.eventName.split(' ');
+  const lastWord = nameParts.pop();
+  const firstWords = nameParts.join(' ');
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(t.venue + ' ' + t.city)}`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=128x128&data=${encodeURIComponent(t.reserveUrl)}&margin=0&color=1E1E1E&bgcolor=FFFFFF`;
+  const mapEmbed = `https://www.google.com/maps/embed/v1/place?key=AIzaSyB_UyYq4AwAxzAHDBfdTUNcgT7ALABLxlc&q=${encodeURIComponent(t.venue + ' ' + t.city)}&zoom=15`;
+
+  return (
+    <div className="event-card">
+      {/* LEFT */}
+      <div className="ec-left">
+        <div className="ec-hero">
+          <div className="ec-eyebrow">Meet-BG · Social Dining</div>
+          <div className="ec-name">{firstWords} <em>{lastWord}</em></div>
+          <div className="ec-subtitle">{t.venue} · {t.city}</div>
+        </div>
+
+        <div className="ec-status-bar">
+          <span className={`status-pill ${statusClass}`}>{statusLabel}</span>
+          <span className="ec-seats-text">от {t.totalSeats} места</span>
+        </div>
+
+        <div className="ec-details">
+          <div className="ec-detail">
+            <span className="ec-detail-label">Дата</span>
+            <span className="ec-detail-value">{t.date}</span>
+          </div>
+          <div className="ec-detail">
+            <span className="ec-detail-label">Час</span>
+            <span className="ec-detail-value">{t.time}</span>
+            <span className="ec-detail-sub">Вратите отварят 15 мин. по-рано</span>
+          </div>
+          <div className="ec-detail">
+            <span className="ec-detail-label">Ресторант</span>
+            <span className="ec-detail-value">{t.venue}</span>
+            <span className="ec-detail-sub">{t.city}</span>
+          </div>
+          <div className="ec-detail">
+            <span className="ec-detail-label">Формат</span>
+            <span className="ec-detail-value">Маса за {t.totalSeats} души</span>
+            <span className="ec-detail-sub">Smart casual · Български</span>
+          </div>
+        </div>
+
+        <div className="ec-rating-row">
+          <div className="ec-rating-num">{t.rating}</div>
+          <div>
+            <div><Stars rating={t.rating} size={16}/></div>
+            <div className="ec-rating-count">{t.reviewCount.toLocaleString()} отзива</div>
+          </div>
+          <GoogleBadge/>
+        </div>
+
+        <div className="ec-avatars">
+          <div className="avatars-stack">
+            {AVATARS.map((a, i) => (
+              <div key={i} className="avatar" style={{background: a.bg, color: a.color || '#1E1E1E', opacity: a.opacity || 1}}>
+                {a.initials}
+              </div>
+            ))}
+            <div className="avatar more">+{t.totalSeats - AVATARS.length - seatsLeft}</div>
+          </div>
+          <div className="ec-avatars-text">
+            <strong>{t.totalSeats - seatsLeft} вече се записали</strong><br/>
+            {seatsLeft > 0 ? `Остават само ${seatsLeft} места` : 'Листа на чакащи'}
+          </div>
+        </div>
+
+        {showReviews && (
+          <div className="ec-reviews">
+            <div className="ec-reviews-title">Отзиви за {t.venue}</div>
+            <div className="ec-reviews-list">
+              {REVIEWS.map((r, i) => (
+                <div key={i} className="ec-review">
+                  <div className="ec-review-head">
+                    <span className="ec-review-author">{r.author}</span>
+                    <span className="ec-review-stars">{'★'.repeat(r.stars)}</span>
+                  </div>
+                  <div className="ec-review-text">{r.text}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* RIGHT */}
+      <div className="ec-right">
+        <div className="ec-map">
+          <iframe src={mapEmbed} title="map" allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"/>
+          <a href={mapsUrl} target="_blank" rel="noopener" className="ec-map-overlay">Отвори в Google Maps ↗</a>
+        </div>
+
+        <div className="ec-action">
+          <div className="ec-price-row">
+            <span className="ec-price">{t.price}</span>
+            <span className="ec-price-note">такса за координация</span>
+          </div>
+          {status !== 'full'
+            ? <a href={t.reserveUrl} className="ec-reserve-btn gold">Резервирай място →</a>
+            : <a href="#" className="ec-reserve-btn">Запиши се в листата</a>
+          }
+          {status !== 'full' && (
+            <a href="#" className="ec-waitlist-btn">Споделяне</a>
+          )}
+
+          <div className="ec-qr-section">
+            <div className="ec-qr-img">
+              <img src={qrUrl} alt="QR код за резервация"/>
+            </div>
+            <div className="ec-qr-text">
+              <strong>Сканирай за резервация</strong>
+              Или отвори в приложението<br/>
+              <span style={{color:'#C9A24D', fontSize:10}}>app.meet-bg.com</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  return (
+    <>
+      <div className="canvas-eyebrow">Meet-BG · Components</div>
+      <div className="canvas-title">Event Card</div>
+
+      <div className="canvas">
+        <EventCard t={t} showReviews={true}/>
+      </div>
+
+      <TweaksPanel>
+        <TweakSection label="Събитие"/>
+        <TweakText label="Заглавие" value={t.eventName} onChange={v => setTweak('eventName', v)}/>
+        <TweakText label="Ресторант" value={t.venue} onChange={v => setTweak('venue', v)}/>
+        <TweakText label="Град" value={t.city} onChange={v => setTweak('city', v)}/>
+        <TweakText label="Дата" value={t.date} onChange={v => setTweak('date', v)}/>
+        <TweakText label="Час" value={t.time} onChange={v => setTweak('time', v)}/>
+        <TweakSection label="Места & Цена"/>
+        <TweakSlider label="Свободни места" value={t.seats} min={0} max={12} step={1} onChange={v => setTweak('seats', v)}/>
+        <TweakSlider label="Общо места" value={t.totalSeats} min={8} max={20} step={1} onChange={v => setTweak('totalSeats', v)}/>
+        <TweakText label="Цена" value={t.price} onChange={v => setTweak('price', v)}/>
+        <TweakSection label="Google оценка"/>
+        <TweakSlider label="Рейтинг" value={t.rating} min={1} max={5} step={0.1} onChange={v => setTweak('rating', v)}/>
+        <TweakSlider label="Брой отзиви" value={t.reviewCount} min={10} max={5000} step={10} onChange={v => setTweak('reviewCount', v)}/>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(<App/>);
+</script>
+</body>
+</html>

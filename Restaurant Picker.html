@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meet-BG · Restaurant Picker</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #C9A24D;
+  --graphite: #1E1E1E;
+  --cream: #F7F4EF;
+  --surface: #ffffff;
+  --border: #E5E7EB;
+  --muted: #6B7280;
+  --green: #22C55E;
+  --red: #EF4444;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background: #F3F1EC;
+  color: var(--graphite);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ── */
+.app { display: grid; grid-template-columns: 380px 1fr; grid-template-rows: 64px 1fr; height: 100vh; overflow: hidden; }
+
+/* ── Top bar ── */
+.topbar {
+  grid-column: 1 / -1;
+  background: var(--graphite);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.topbar-logo { display: flex; align-items: center; gap: 10px; }
+.topbar-wordmark { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: white; }
+.topbar-title { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-left: 16px; padding-left: 16px; border-left: 1px solid rgba(255,255,255,0.1); }
+.approved-count { background: rgba(201,162,77,0.2); color: var(--gold); border: 1px solid rgba(201,162,77,0.35); border-radius: 99px; padding: 4px 14px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.approved-count:hover { background: rgba(201,162,77,0.3); }
+
+/* ── Sidebar ── */
+.sidebar {
+  background: white;
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.sidebar-inner { padding: 20px; display: flex; flex-direction: column; gap: 14px; flex-shrink: 0; }
+
+.search-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+.search-input {
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  font-family: 'Inter', sans-serif; font-size: 14px; color: var(--graphite);
+  outline: none; transition: border-color 0.15s;
+  background: #FAFAFA;
+}
+.search-input:focus { border-color: var(--gold); background: white; }
+
+.city-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.city-pill {
+  padding: 5px 14px; border-radius: 99px; font-size: 12px; font-weight: 500;
+  cursor: pointer; border: 1.5px solid var(--border); background: white;
+  color: var(--muted); transition: all 0.15s;
+}
+.city-pill:hover { border-color: var(--gold); color: var(--gold); }
+.city-pill.active { background: var(--graphite); color: white; border-color: var(--graphite); }
+
+/* Filters */
+.filters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.filter-group { display: flex; flex-direction: column; gap: 5px; }
+.filter-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.filter-select, .filter-input {
+  padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 7px;
+  font-family: 'Inter', sans-serif; font-size: 13px; color: var(--graphite);
+  background: #FAFAFA; outline: none; transition: border-color 0.15s;
+}
+.filter-select:focus, .filter-input:focus { border-color: var(--gold); }
+
+.search-btn {
+  width: 100%; padding: 12px; background: var(--graphite); color: white;
+  border: none; border-radius: 8px; font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.search-btn:hover { background: #2B2B2B; }
+.search-btn:disabled { background: var(--border); color: var(--muted); cursor: default; }
+.spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Results list */
+.results-header {
+  padding: 10px 20px 6px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); border-top: 1px solid var(--border); flex-shrink: 0;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.results-list { flex: 1; overflow-y: auto; padding: 6px 10px 20px; }
+
+/* Restaurant card in list */
+.rest-item {
+  padding: 12px 10px; border-radius: 10px; cursor: pointer;
+  transition: background 0.12s; display: flex; align-items: flex-start; gap: 12px;
+  border: 1.5px solid transparent; margin-bottom: 4px;
+}
+.rest-item:hover { background: #F9F7F3; }
+.rest-item.selected { background: #FBF8F3; border-color: rgba(201,162,77,0.4); }
+.rest-item.approved-item { opacity: 0.5; }
+
+.rest-photo {
+  width: 52px; height: 52px; border-radius: 8px; object-fit: cover; flex-shrink: 0;
+  background: #EDE8E0;
+}
+.rest-photo-placeholder {
+  width: 52px; height: 52px; border-radius: 8px; flex-shrink: 0;
+  background: linear-gradient(135deg, #EDE8E0 0%, #D8D2C8 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.rest-info { flex: 1; min-width: 0; }
+.rest-name { font-size: 13px; font-weight: 600; color: var(--graphite); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 3px; }
+.rest-addr { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
+.rest-meta { display: flex; align-items: center; gap: 8px; }
+.rest-stars { color: #F59E0B; font-size: 11px; }
+.rest-rating { font-size: 12px; font-weight: 600; color: var(--graphite); }
+.rest-reviews { font-size: 11px; color: var(--muted); }
+.rest-price { font-size: 11px; color: var(--muted); }
+.approved-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); padding: 2px 7px; border-radius: 99px; flex-shrink: 0; margin-top: 2px; }
+
+/* ── Main panel ── */
+.main { display: flex; flex-direction: column; overflow: hidden; }
+
+/* Map */
+#map { flex: 1; min-height: 0; }
+
+/* Detail drawer */
+.detail-drawer {
+  background: white; border-top: 1px solid var(--border);
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.detail-drawer.open { max-height: 340px; }
+.detail-inner { padding: 22px 28px; display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: start; }
+
+.detail-left {}
+.detail-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; line-height: 1.1; margin-bottom: 4px; }
+.detail-address { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+.detail-row { display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap; }
+.detail-stat { display: flex; flex-direction: column; gap: 2px; }
+.detail-stat-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.detail-stat-val { font-size: 18px; font-weight: 600; font-family: 'Cormorant Garamond', serif; color: var(--graphite); }
+.detail-stat-val.gold { color: var(--gold); }
+
+/* Reviews */
+.reviews-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.reviews-list { display: flex; flex-direction: column; gap: 8px; max-height: 120px; overflow-y: auto; }
+.review-item { background: #F9F7F3; border-radius: 8px; padding: 10px 12px; }
+.review-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.review-author { font-size: 12px; font-weight: 600; }
+.review-stars { color: #F59E0B; font-size: 11px; }
+.review-text { font-size: 12px; color: #4B4B4B; line-height: 1.5; }
+
+/* Actions */
+.detail-actions { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+.btn-approve {
+  background: var(--graphite); color: white; border: none; border-radius: 9px;
+  padding: 12px 24px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  display: flex; align-items: center; gap: 7px;
+}
+.btn-approve:hover { background: #2B2B2B; }
+.btn-approve.approved { background: rgba(34,197,94,0.12); color: var(--green); border: 1.5px solid rgba(34,197,94,0.3); }
+.btn-maps {
+  background: transparent; color: var(--muted); border: 1.5px solid var(--border);
+  border-radius: 9px; padding: 10px 18px; font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.btn-maps:hover { border-color: var(--gold); color: var(--gold); }
+.detail-types { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.type-tag { font-size: 10px; padding: 3px 9px; border-radius: 99px; background: #F3F4F6; color: var(--muted); font-weight: 500; }
+
+/* Empty states */
+.empty-state { padding: 32px 20px; text-align: center; color: var(--muted); }
+.empty-state-icon { font-size: 28px; margin-bottom: 8px; }
+.empty-state-text { font-size: 13px; line-height: 1.6; }
+.map-placeholder {
+  flex: 1; background: #EDE8E0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; color: var(--muted);
+}
+.map-placeholder-icon { font-size: 40px; opacity: 0.4; }
+.map-placeholder-text { font-size: 14px; opacity: 0.6; }
+
+/* Approved modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.modal-overlay.visible { opacity: 1; pointer-events: all; }
+.modal {
+  background: white; border-radius: 14px; width: 520px; max-height: 80vh;
+  overflow-y: auto; padding: 28px;
+  transform: translateY(10px); transition: transform 0.2s;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.modal-overlay.visible .modal { transform: translateY(0); }
+.modal-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; margin-bottom: 20px; }
+.modal-item { padding: 12px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.modal-item:last-child { border-bottom: none; }
+.modal-item-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.modal-item-addr { font-size: 12px; color: var(--muted); }
+.modal-item-meta { font-size: 12px; color: #F59E0B; }
+.btn-remove { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 5px 10px; font-size: 11px; color: var(--muted); cursor: pointer; flex-shrink: 0; }
+.btn-remove:hover { border-color: var(--red); color: var(--red); }
+.modal-close { width: 100%; padding: 12px; background: var(--graphite); color: white; border: none; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 16px; }
+.export-btn { width: 100%; padding: 10px; background: rgba(201,162,77,0.1); color: var(--gold); border: 1.5px solid rgba(201,162,77,0.35); border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+
+/* No results */
+.no-results { padding: 24px 20px; text-align: center; }
+.no-results-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      <svg width="26" height="26" viewBox="0 0 64 64" fill="none">
+        <path d="M38.5 5.2 A28 28 0 1 1 25.5 5.2" stroke="#C9A24D" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M25 21 Q24 30 28.5 33.5 Q30 35.5 32 35.5 Q34 35.5 35.5 33.5 Q40 30 39 21 Z" stroke="#C9A24D" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
+        <line x1="32" y1="35.5" x2="32" y2="42" stroke="#C9A24D" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="27" y1="42" x2="37" y2="42" stroke="#C9A24D" stroke-width="1.6" stroke-linecap="round"/>
+        <circle cx="32" cy="5.5" r="2.6" fill="#C9A24D" opacity="0.3"/>
+        <circle cx="51.5" cy="18.5" r="2.6" fill="#C9A24D"/>
+        <circle cx="51.5" cy="45.5" r="2.6" fill="#C9A24D"/>
+        <circle cx="32" cy="58.5" r="2.6" fill="#C9A24D"/>
+        <circle cx="12.5" cy="45.5" r="2.6" fill="#C9A24D"/>
+        <circle cx="12.5" cy="18.5" r="2.6" fill="#C9A24D"/>
+      </svg>
+      <span class="topbar-wordmark">meet-bg</span>
+      <span class="topbar-title">Restaurant Picker</span>
+    </div>
+    <button class="approved-count" id="approvedBtn">0 одобрени ресторанта</button>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div>
+        <div class="search-label">Търси ресторант</div>
+        <input class="search-input" id="searchInput" type="text" placeholder="напр. restaurant, fine dining, Bulgarian...">
+      </div>
+
+      <div>
+        <div class="search-label">Бърз избор на град</div>
+        <div class="city-pills">
+          <button class="city-pill active" data-city="Sofia, Bulgaria">🇧🇬 София</button>
+          <button class="city-pill" data-city="London, United Kingdom">🇬🇧 London</button>
+          <button class="city-pill" data-city="Berlin, Germany">🇩🇪 Berlin</button>
+          <button class="city-pill" data-city="Munich, Germany">🇩🇪 Munich</button>
+          <button class="city-pill" data-city="New York, USA">🇺🇸 New York</button>
+          <button class="city-pill" data-city="Chicago, USA">🇺🇸 Chicago</button>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="filter-group">
+          <label class="filter-label">Мин. оценка ⭐</label>
+          <select class="filter-select" id="minRating">
+            <option value="0">Всички</option>
+            <option value="3.5">3.5+</option>
+            <option value="4.0" selected>4.0+</option>
+            <option value="4.5">4.5+</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">Мин. отзиви</label>
+          <select class="filter-select" id="minReviews">
+            <option value="0">Без лимит</option>
+            <option value="50" selected>50+</option>
+            <option value="100">100+</option>
+            <option value="200">200+</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="search-btn" id="searchBtn">
+        <span id="searchBtnText">Търси</span>
+      </button>
+    </div>
+
+    <div class="results-header">
+      <span id="resultsCount">Резултати</span>
+      <span id="filterNote" style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:#C9A24D"></span>
+    </div>
+    <div class="results-list" id="resultsList">
+      <div class="empty-state">
+        <div class="empty-state-icon">🔍</div>
+        <div class="empty-state-text">Избери град и натисни<br><strong>Търси</strong></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div id="mapContainer" style="flex:1;min-height:0">
+      <div class="map-placeholder" id="mapPlaceholder">
+        <div class="map-placeholder-icon">🗺️</div>
+        <div class="map-placeholder-text">Картата се зарежда след търсене</div>
+      </div>
+      <div id="map" style="display:none;width:100%;height:100%"></div>
+    </div>
+
+    <div class="detail-drawer" id="detailDrawer">
+      <div class="detail-inner">
+        <div class="detail-left" id="detailLeft"></div>
+        <div class="detail-actions" id="detailActions"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Approved Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">Одобрени ресторанти</div>
+    <div id="modalList"></div>
+    <button class="export-btn" id="exportBtn">Копирай JSON →</button>
+    <button class="modal-close" id="modalClose">Затвори</button>
+  </div>
+</div>
+
+<script>
+const API_KEY = 'AIzaSyB_UyYq4AwAxzAHDBfdTUNcgT7ALABLxlc';
+let map, service, placesService;
+let results = [];
+let selected = null;
+let approved = JSON.parse(localStorage.getItem('mbg_approved') || '[]');
+let markers = [];
+let activeMarker = null;
+let currentCity = 'Sofia, Bulgaria';
+
+function starsHtml(rating) {
+  const full = Math.floor(rating);
+  const half = rating % 1 >= 0.5;
+  let s = '';
+  for (let i = 0; i < 5; i++) {
+    if (i < full) s += '★';
+    else if (i === full && half) s += '½';
+    else s += '☆';
+  }
+  return s;
+}
+
+function priceLevel(n) {
+  if (!n && n !== 0) return '';
+  return ['', '€', '€€', '€€€', '€€€€'][n] || '';
+}
+
+function isApproved(placeId) {
+  return approved.some(a => a.place_id === placeId);
+}
+
+function saveApproved() {
+  localStorage.setItem('mbg_approved', JSON.stringify(approved));
+  updateApprovedCount();
+}
+
+function updateApprovedCount() {
+  document.getElementById('approvedBtn').textContent = `${approved.length} одобрени ресторанта`;
+}
+
+// City pills
+document.querySelectorAll('.city-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.city-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    currentCity = pill.dataset.city;
+  });
+});
+
+// Search
+document.getElementById('searchBtn').addEventListener('click', doSearch);
+document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+function doSearch() {
+  const btn = document.getElementById('searchBtn');
+  const btnText = document.getElementById('searchBtnText');
+  const query = document.getElementById('searchInput').value.trim() || 'restaurant';
+  const minRating = parseFloat(document.getElementById('minRating').value);
+  const minReviews = parseInt(document.getElementById('minReviews').value);
+
+  btn.disabled = true;
+  btnText.textContent = '';
+  const spinner = document.createElement('div');
+  spinner.className = 'spinner';
+  btn.appendChild(spinner);
+
+  // Use Places Autocomplete to geocode the city first, then Text Search
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ address: currentCity }, (geoResults, geoStatus) => {
+    if (geoStatus !== 'OK' || !geoResults.length) {
+      alert('Не намерих местоположение за ' + currentCity);
+      resetBtn(); return;
+    }
+    const location = geoResults[0].geometry.location;
+    const bounds = geoResults[0].geometry.bounds || geoResults[0].geometry.viewport;
+
+    // Init map if not done
+    if (!map) {
+      document.getElementById('mapPlaceholder').style.display = 'none';
+      document.getElementById('map').style.display = 'block';
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: location,
+        zoom: 14,
+        styles: mapStyle,
+        disableDefaultUI: false,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+      });
+      service = new google.maps.places.PlacesService(map);
+    } else {
+      map.setCenter(location);
+      map.setZoom(14);
+    }
+
+    const request = {
+      location: location,
+      radius: 3000,
+      type: 'restaurant',
+      keyword: query,
+    };
+
+    service.nearbySearch(request, (searchResults, status) => {
+      resetBtn();
+      if (status !== google.maps.places.PlacesServiceStatus.OK) {
+        document.getElementById('resultsList').innerHTML = `<div class="no-results"><p class="no-results-text">Няма резултати за "${query}" в ${currentCity}.</p></div>`;
+        document.getElementById('resultsCount').textContent = '0 резултата';
+        return;
+      }
+
+      // Filter
+      results = searchResults.filter(r => {
+        if (r.rating && r.rating < minRating) return false;
+        if (r.user_ratings_total && r.user_ratings_total < minReviews) return false;
+        return true;
+      });
+
+      // Clear old markers
+      markers.forEach(m => m.setMap(null));
+      markers = [];
+
+      // Add markers
+      results.forEach((r, i) => {
+        const marker = new google.maps.Marker({
+          position: r.geometry.location,
+          map,
+          title: r.name,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: isApproved(r.place_id) ? '#22C55E' : '#1E1E1E',
+            fillOpacity: 1,
+            strokeColor: '#C9A24D',
+            strokeWeight: 2,
+          }
+        });
+        marker.addListener('click', () => selectResult(i));
+        markers.push(marker);
+      });
+
+      renderResults(results);
+      document.getElementById('resultsCount').textContent = `${results.length} ресторанта`;
+
+      const filtered = searchResults.length - results.length;
+      document.getElementById('filterNote').textContent = filtered > 0 ? `${filtered} филтрирани` : '';
+    });
+  });
+
+  function resetBtn() {
+    btn.disabled = false;
+    btnText.textContent = 'Търси';
+    if (btn.querySelector('.spinner')) btn.querySelector('.spinner').remove();
+  }
+}
+
+function renderResults(list) {
+  const el = document.getElementById('resultsList');
+  if (!list.length) {
+    el.innerHTML = '<div class="no-results"><p class="no-results-text">Няма резултати след филтрирането.<br>Опитай с по-ниски изисквания.</p></div>';
+    return;
+  }
+  el.innerHTML = list.map((r, i) => {
+    const photo = r.photos && r.photos.length ? r.photos[0].getUrl({maxWidth:80,maxHeight:80}) : null;
+    const approv = isApproved(r.place_id);
+    return `
+    <div class="rest-item ${approv ? 'approved-item' : ''}" data-index="${i}" onclick="selectResult(${i})">
+      ${photo
+        ? `<img class="rest-photo" src="${photo}" alt="${r.name}">`
+        : `<div class="rest-photo-placeholder">🍽️</div>`}
+      <div class="rest-info">
+        <div class="rest-name">${r.name}</div>
+        <div class="rest-addr">${r.vicinity || ''}</div>
+        <div class="rest-meta">
+          ${r.rating ? `<span class="rest-stars">${starsHtml(r.rating)}</span><span class="rest-rating">${r.rating}</span><span class="rest-reviews">(${(r.user_ratings_total||0).toLocaleString()})</span>` : '<span class="rest-reviews">Без оценка</span>'}
+          ${r.price_level ? `<span class="rest-price">${priceLevel(r.price_level)}</span>` : ''}
+        </div>
+      </div>
+      ${approv ? '<span class="approved-badge">✓ Одобрен</span>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function selectResult(i) {
+  selected = results[i];
+  // Highlight in list
+  document.querySelectorAll('.rest-item').forEach((el, idx) => {
+    el.classList.toggle('selected', idx === i);
+  });
+  // Highlight marker
+  markers.forEach((m, idx) => {
+    m.setIcon({
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: idx === i ? 12 : 8,
+      fillColor: isApproved(results[idx].place_id) ? '#22C55E' : (idx === i ? '#C9A24D' : '#1E1E1E'),
+      fillOpacity: 1,
+      strokeColor: '#C9A24D',
+      strokeWeight: 2,
+    });
+  });
+  map.panTo(selected.geometry.location);
+
+  // Fetch details
+  service.getDetails({
+    placeId: selected.place_id,
+    fields: ['name','formatted_address','rating','user_ratings_total','price_level','reviews','photos','types','url','website','formatted_phone_number','opening_hours'],
+  }, (place, status) => {
+    if (status !== google.maps.places.PlacesServiceStatus.OK) return;
+    renderDetail(place);
+  });
+}
+
+function renderDetail(place) {
+  const drawer = document.getElementById('detailDrawer');
+  const left = document.getElementById('detailLeft');
+  const actions = document.getElementById('detailActions');
+  const approv = isApproved(place.place_id);
+
+  const types = (place.types || []).filter(t => !['establishment','point_of_interest','food'].includes(t)).slice(0,4);
+
+  const reviewsHtml = (place.reviews || []).slice(0,3).map(r => `
+    <div class="review-item">
+      <div class="review-header">
+        <span class="review-author">${r.author_name}</span>
+        <span class="review-stars">${starsHtml(r.rating)}</span>
+      </div>
+      <div class="review-text">${r.text ? r.text.slice(0,120) + (r.text.length > 120 ? '…' : '') : ''}</div>
+    </div>
+  `).join('');
+
+  left.innerHTML = `
+    <div class="detail-name">${place.name}</div>
+    <div class="detail-address">📍 ${place.formatted_address || ''}</div>
+    <div class="detail-row">
+      <div class="detail-stat">
+        <span class="detail-stat-label">Оценка</span>
+        <span class="detail-stat-val gold">${place.rating || '—'} ★</span>
+      </div>
+      <div class="detail-stat">
+        <span class="detail-stat-label">Отзиви</span>
+        <span class="detail-stat-val">${(place.user_ratings_total||0).toLocaleString()}</span>
+      </div>
+      <div class="detail-stat">
+        <span class="detail-stat-label">Ценово ниво</span>
+        <span class="detail-stat-val">${priceLevel(place.price_level) || '—'}</span>
+      </div>
+      ${place.opening_hours ? `<div class="detail-stat">
+        <span class="detail-stat-label">Статус</span>
+        <span class="detail-stat-val" style="font-size:14px;color:${place.opening_hours.isOpen() ? '#22C55E' : '#EF4444'}">${place.opening_hours.isOpen() ? 'Отворено' : 'Затворено'}</span>
+      </div>` : ''}
+    </div>
+    <div class="detail-types">${types.map(t => `<span class="type-tag">${t.replace(/_/g,' ')}</span>`).join('')}</div>
+    ${reviewsHtml ? `<div style="margin-top:12px"><div class="reviews-title">Последни отзиви</div><div class="reviews-list">${reviewsHtml}</div></div>` : ''}
+  `;
+
+  actions.innerHTML = `
+    <button class="btn-approve ${approv ? 'approved' : ''}" id="approveBtn" onclick="toggleApprove()">
+      ${approv ? '✓ Одобрен' : '+ Одобри за Meet-BG'}
+    </button>
+    ${place.url ? `<button class="btn-maps" onclick="window.open('${place.url}','_blank')">Отвори в Google Maps ↗</button>` : ''}
+    ${place.website ? `<button class="btn-maps" onclick="window.open('${place.website}','_blank')">Уебсайт ↗</button>` : ''}
+  `;
+
+  drawer.classList.add('open');
+}
+
+function toggleApprove() {
+  if (!selected) return;
+  const idx = approved.findIndex(a => a.place_id === selected.place_id);
+  if (idx >= 0) {
+    approved.splice(idx, 1);
+  } else {
+    approved.push({
+      place_id: selected.place_id,
+      name: selected.name,
+      address: selected.vicinity || '',
+      rating: selected.rating,
+      reviews: selected.user_ratings_total,
+      price_level: selected.price_level,
+      city: currentCity,
+      approved_at: new Date().toISOString(),
+    });
+  }
+  saveApproved();
+  renderResults(results);
+  // Re-render detail button
+  const approv = isApproved(selected.place_id);
+  const btn = document.getElementById('approveBtn');
+  if (btn) {
+    btn.textContent = approv ? '✓ Одобрен' : '+ Одобри за Meet-BG';
+    btn.className = `btn-approve ${approv ? 'approved' : ''}`;
+  }
+  // Update marker color
+  const idx2 = results.findIndex(r => r.place_id === selected.place_id);
+  if (markers[idx2]) {
+    markers[idx2].setIcon({
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 12,
+      fillColor: approv ? '#22C55E' : '#C9A24D',
+      fillOpacity: 1,
+      strokeColor: '#C9A24D',
+      strokeWeight: 2,
+    });
+  }
+}
+
+// Approved modal
+document.getElementById('approvedBtn').addEventListener('click', () => {
+  const modal = document.getElementById('modalOverlay');
+  const list = document.getElementById('modalList');
+  list.innerHTML = approved.length === 0
+    ? '<p style="color:#6B7280;font-size:14px">Все още няма одобрени ресторанти.</p>'
+    : approved.map((r, i) => `
+      <div class="modal-item">
+        <div>
+          <div class="modal-item-name">${r.name}</div>
+          <div class="modal-item-addr">${r.city} · ${r.address}</div>
+          <div class="modal-item-meta">★ ${r.rating} · ${(r.reviews||0).toLocaleString()} отзива ${priceLevel(r.price_level) ? '· ' + priceLevel(r.price_level) : ''}</div>
+        </div>
+        <button class="btn-remove" onclick="removeApproved(${i})">Премахни</button>
+      </div>`).join('');
+  modal.classList.add('visible');
+});
+document.getElementById('modalClose').addEventListener('click', () => {
+  document.getElementById('modalOverlay').classList.remove('visible');
+});
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('visible');
+});
+document.getElementById('exportBtn').addEventListener('click', () => {
+  navigator.clipboard.writeText(JSON.stringify(approved, null, 2)).then(() => {
+    document.getElementById('exportBtn').textContent = '✓ Копирано!';
+    setTimeout(() => document.getElementById('exportBtn').textContent = 'Копирай JSON →', 1500);
+  });
+});
+
+function removeApproved(i) {
+  approved.splice(i, 1);
+  saveApproved();
+  document.getElementById('approvedBtn').click();
+  renderResults(results);
+}
+
+updateApprovedCount();
+
+// Custom map style — warm, minimal
+const mapStyle = [
+  {featureType:'all',elementType:'geometry',stylers:[{color:'#f2ede6'}]},
+  {featureType:'water',elementType:'geometry',stylers:[{color:'#d4cfc8'}]},
+  {featureType:'road',elementType:'geometry',stylers:[{color:'#e8e0d5'}]},
+  {featureType:'road.highway',elementType:'geometry',stylers:[{color:'#ddd6cb'}]},
+  {featureType:'poi.park',elementType:'geometry',stylers:[{color:'#ddd9d2'}]},
+  {featureType:'poi',elementType:'labels',stylers:[{visibility:'off'}]},
+  {featureType:'transit',elementType:'labels',stylers:[{visibility:'off'}]},
+  {featureType:'administrative',elementType:'labels.text.fill',stylers:[{color:'#9CA3AF'}]},
+  {featureType:'road',elementType:'labels.text.fill',stylers:[{color:'#9CA3AF'}]},
+];
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB_UyYq4AwAxzAHDBfdTUNcgT7ALABLxlc&libraries=places&language=bg" async defer></script>
+</body>
+</html>

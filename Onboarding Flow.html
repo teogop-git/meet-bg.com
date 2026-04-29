@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meet-BG · Onboarding Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #1A1714;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 48px 24px;
+  -webkit-font-smoothing: antialiased;
+}
+.canvas-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(255,255,255,0.2); text-align: center; margin-bottom: 8px;
+}
+.canvas-title {
+  font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400;
+  color: rgba(255,255,255,0.7); text-align: center; margin-bottom: 36px;
+}
+
+/* Frames row */
+.frames-row {
+  display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; justify-content: center;
+}
+.frame-col { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.frame-step-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.25); text-align: center;
+}
+
+/* ── iPhone frame ── */
+.iphone {
+  width: 300px;
+  background: #1A1714;
+  border-radius: 44px;
+  padding: 14px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 32px 80px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.04);
+  position: relative;
+}
+.iphone-screen {
+  background: #0D0D0D;
+  border-radius: 34px;
+  overflow: hidden;
+  height: 600px;
+  position: relative;
+}
+/* Notch / Dynamic Island */
+.iphone-island {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  width: 88px; height: 26px; background: #000;
+  border-radius: 99px; z-index: 10;
+}
+/* Status bar */
+.iphone-status {
+  position: absolute; top: 0; left: 0; right: 0; height: 48px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 0 20px 8px; z-index: 9;
+}
+.status-time { font-size: 14px; font-weight: 600; color: white; letter-spacing: -0.01em; }
+.status-icons { display: flex; align-items: center; gap: 5px; }
+.status-icons svg { fill: white; }
+
+/* Screen content */
+.screen { height: 100%; display: flex; flex-direction: column; }
+
+/* ── SCREEN STYLES ── */
+
+/* Splash */
+.splash {
+  background: #0D0D0D; flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 28px;
+  position: relative; overflow: hidden;
+}
+.splash::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 200px 200px at 50% 40%, rgba(201,162,77,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.splash-logo { margin-bottom: 20px; }
+.splash-name {
+  font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400;
+  color: white; margin-bottom: 8px; text-align: center;
+}
+.splash-tagline {
+  font-size: 13px; color: rgba(255,255,255,0.4); text-align: center;
+  line-height: 1.6; max-width: 200px; margin-bottom: 40px;
+}
+.splash-btn {
+  width: 100%; padding: 14px; background: #C9A24D; color: #1E1E1E;
+  border: none; border-radius: 12px; font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  margin-bottom: 12px;
+}
+.splash-btn-outline {
+  width: 100%; padding: 13px; background: transparent; color: rgba(255,255,255,0.5);
+  border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px;
+  font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer;
+}
+.splash-divider {
+  display: flex; align-items: center; gap: 12px; width: 100%; margin: 16px 0;
+}
+.splash-divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+.splash-divider-text { font-size: 11px; color: rgba(255,255,255,0.2); }
+
+/* Form screen */
+.form-screen {
+  background: #0D0D0D; flex: 1;
+  display: flex; flex-direction: column;
+  padding-top: 52px;
+}
+.form-nav {
+  display: flex; align-items: center; padding: 0 20px 16px;
+}
+.back-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,0.07); border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: white; font-size: 16px;
+}
+.form-progress { flex: 1; margin: 0 12px; }
+.progress-track { height: 3px; background: rgba(255,255,255,0.1); border-radius: 99px; }
+.progress-fill { height: 100%; background: #C9A24D; border-radius: 99px; transition: width 0.4s; }
+.progress-label { font-size: 10px; color: rgba(255,255,255,0.3); text-align: right; margin-top: 4px; }
+
+.form-body { flex: 1; padding: 0 20px; display: flex; flex-direction: column; gap: 20px; overflow-y: auto; }
+.form-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: white; line-height: 1.2; }
+.form-title em { color: #C9A24D; font-style: italic; }
+.form-sub { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.6; }
+.form-fields { display: flex; flex-direction: column; gap: 12px; }
+.field-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 6px; }
+.field-input {
+  width: 100%; padding: 13px 14px;
+  background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 14px;
+  color: white; outline: none;
+}
+.field-input.active-field { border-color: #C9A24D; background: rgba(201,162,77,0.06); }
+.field-input.filled { border-color: rgba(255,255,255,0.15); }
+
+/* Phone input */
+.phone-row { display: flex; gap: 8px; }
+.phone-prefix {
+  padding: 13px 12px;
+  background: rgba(255,255,255,0.06); border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 10px; font-size: 14px; color: rgba(255,255,255,0.6);
+  display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+}
+
+/* Country picker */
+.country-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.country-option {
+  padding: 11px 12px; border-radius: 10px; cursor: pointer;
+  background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.7);
+  transition: all 0.15s;
+}
+.country-option.selected { background: rgba(201,162,77,0.12); border-color: rgba(201,162,77,0.4); color: white; }
+.country-flag { font-size: 18px; }
+
+/* Verify screen */
+.verify-digits {
+  display: flex; gap: 10px; justify-content: center; margin: 4px 0;
+}
+.digit-box {
+  width: 44px; height: 52px; border-radius: 10px;
+  border: 1.5px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 600; color: white;
+}
+.digit-box.active-d { border-color: #C9A24D; background: rgba(201,162,77,0.06); }
+.digit-box.filled-d { border-color: rgba(255,255,255,0.25); }
+.verify-resend { text-align: center; font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+.verify-resend span { color: #C9A24D; }
+
+/* Profile pic */
+.avatar-picker {
+  display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 4px 0;
+}
+.avatar-circle {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #C9A24D 0%, #A8833A 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 500; color: #1E1E1E;
+  border: 3px solid rgba(201,162,77,0.4);
+  position: relative;
+}
+.avatar-edit-badge {
+  position: absolute; bottom: 0; right: 0;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #C9A24D; color: #1E1E1E;
+  font-size: 11px; display: flex; align-items: center; justify-content: center;
+  border: 2px solid #0D0D0D;
+}
+.avatar-hint { font-size: 11px; color: rgba(255,255,255,0.3); }
+
+/* Interests */
+.interest-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.interest-chip {
+  padding: 7px 14px; border-radius: 99px; cursor: pointer;
+  background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1);
+  font-size: 12px; color: rgba(255,255,255,0.6); transition: all 0.15s;
+}
+.interest-chip.selected { background: rgba(201,162,77,0.15); border-color: rgba(201,162,77,0.4); color: #C9A24D; }
+
+/* Success screen */
+.success-screen {
+  background: #0D0D0D; flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 24px; text-align: center;
+}
+.success-ring {
+  width: 80px; height: 80px; border-radius: 50%;
+  border: 2px solid #C9A24D; display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px; position: relative;
+}
+.success-ring::before {
+  content: ''; position: absolute; inset: -6px; border-radius: 50%;
+  border: 1px solid rgba(201,162,77,0.2);
+}
+.success-check { font-size: 32px; }
+.success-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; color: white; margin-bottom: 8px; line-height: 1.2; }
+.success-title em { color: #C9A24D; font-style: italic; }
+.success-sub { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.6; max-width: 200px; margin-bottom: 32px; }
+
+/* Event preview card inside phone */
+.mini-event {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 14px 16px; text-align: left; width: 100%; margin-bottom: 20px;
+}
+.mini-event-date { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #C9A24D; margin-bottom: 4px; }
+.mini-event-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 400; color: white; margin-bottom: 6px; }
+.mini-event-meta { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.4); }
+.mini-event-seats { background: rgba(245,158,11,0.15); color: #F59E0B; border: 1px solid rgba(245,158,11,0.25); border-radius: 99px; padding: 2px 9px; font-size: 10px; font-weight: 700; }
+
+/* Bottom CTA */
+.form-footer { padding: 12px 20px 20px; flex-shrink: 0; }
+.next-btn {
+  width: 100%; padding: 15px; border: none; border-radius: 12px;
+  font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer;
+  background: #C9A24D; color: #1E1E1E; transition: all 0.15s;
+}
+.next-btn:disabled { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); cursor: default; }
+.next-btn.dark { background: #1E1E1E; color: white; border: 1.5px solid rgba(255,255,255,0.1); }
+.step-dots { display: flex; justify-content: center; gap: 6px; margin-top: 12px; }
+.step-dot { width: 6px; height: 6px; border-radius: 99px; background: rgba(255,255,255,0.15); transition: all 0.2s; }
+.step-dot.active-dot { background: #C9A24D; width: 16px; }
+
+/* Keyboard hint */
+.keyboard-hint {
+  margin: 0 20px 12px;
+  background: rgba(255,255,255,0.04); border-radius: 10px; padding: 8px 12px;
+  font-size: 11px; color: rgba(255,255,255,0.3); display: flex; align-items: center; gap: 6px;
+}
+
+/* Arrow between frames */
+.arrow {
+  color: rgba(255,255,255,0.15); font-size: 20px;
+  align-self: center; margin-top: -20px; flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script type="text/babel">
+function StatusBar() {
+  return (
+    <>
+      <div className="iphone-island"/>
+      <div className="iphone-status">
+        <span className="status-time">9:41</span>
+        <div className="status-icons">
+          <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="3" width="3" height="9" rx="1" opacity="0.3"/><rect x="4.5" y="2" width="3" height="10" rx="1" opacity="0.5"/><rect x="9" y="0" width="3" height="12" rx="1" opacity="0.8"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="15" height="12" viewBox="0 0 15 12"><path d="M7.5 2.5 C10 2.5 12.2 3.8 13.5 5.8 L14.5 4.5 C12.9 2.2 10.4 0.8 7.5 0.8 C4.6 0.8 2.1 2.2 0.5 4.5 L1.5 5.8 C2.8 3.8 5 2.5 7.5 2.5Z" opacity="0.4"/><path d="M7.5 5 C9 5 10.4 5.8 11.3 7 L12.4 5.7 C11.1 4.2 9.4 3.3 7.5 3.3 C5.6 3.3 3.9 4.2 2.6 5.7 L3.7 7 C4.6 5.8 6 5 7.5 5Z" opacity="0.7"/><circle cx="7.5" cy="10" r="1.5"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2.5" stroke="white" strokeWidth="1" fill="none" opacity="0.35"/><rect x="22" y="4" width="2" height="4" rx="1" fill="white" opacity="0.4"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="white"/></svg>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Logo({ size = 28, color = "#C9A24D" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
+      <path d="M38.5 5.2 A28 28 0 1 1 25.5 5.2" stroke={color} strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M25 21 Q24 30 28.5 33.5 Q30 35.5 32 35.5 Q34 35.5 35.5 33.5 Q40 30 39 21 Z" stroke={color} strokeWidth="1.6" strokeLinejoin="round" fill="none"/>
+      <line x1="32" y1="35.5" x2="32" y2="42" stroke={color} strokeWidth="1.6" strokeLinecap="round"/>
+      <line x1="27" y1="42" x2="37" y2="42" stroke={color} strokeWidth="1.6" strokeLinecap="round"/>
+      <circle cx="32" cy="5.5" r="2.6" fill={color} opacity="0.3"/>
+      <circle cx="51.5" cy="18.5" r="2.6" fill={color}/>
+      <circle cx="51.5" cy="45.5" r="2.6" fill={color}/>
+      <circle cx="32" cy="58.5" r="2.6" fill={color}/>
+      <circle cx="12.5" cy="45.5" r="2.6" fill={color}/>
+      <circle cx="12.5" cy="18.5" r="2.6" fill={color}/>
+    </svg>
+  );
+}
+
+// ── Screen 1: Splash ─────────────────────────────────────────
+function ScreenSplash() {
+  return (
+    <div className="screen">
+      <div className="splash">
+        <div className="splash-logo"><Logo size={52}/></div>
+        <div className="splash-name">meet-bg</div>
+        <div className="splash-tagline">Вечери, които свързват българи по целия свят.</div>
+        <button className="splash-btn">Създай профил</button>
+        <div className="splash-divider">
+          <div className="splash-divider-line"/>
+          <span className="splash-divider-text">или</span>
+          <div className="splash-divider-line"/>
+        </div>
+        <button className="splash-btn-outline">Вече имам акаунт</button>
+      </div>
+    </div>
+  );
+}
+
+// ── Screen 2: Registration ────────────────────────────────────
+function ScreenRegister() {
+  const [country, setCountry] = React.useState('bg');
+  const countries = [
+    { code: 'bg', flag: '🇧🇬', label: 'България' },
+    { code: 'uk', flag: '🇬🇧', label: 'UK' },
+    { code: 'de', flag: '🇩🇪', label: 'Germany' },
+    { code: 'us', flag: '🇺🇸', label: 'USA' },
+  ];
+  return (
+    <div className="screen">
+      <div className="form-screen">
+        <div className="form-nav">
+          <button className="back-btn">‹</button>
+          <div className="form-progress">
+            <div className="progress-track"><div className="progress-fill" style={{width:'25%'}}/></div>
+            <div className="progress-label">1 / 4</div>
+          </div>
+        </div>
+        <div className="form-body">
+          <div className="form-title">Твоето <em>истинско</em> име</div>
+          <div className="form-sub">Само верифицирани профили. Анонимността не е добре дошла.</div>
+          <div className="form-fields">
+            <div>
+              <div className="field-label">Първо & Фамилно</div>
+              <input className="field-input filled" defaultValue="Ивелина Петрова" readOnly/>
+            </div>
+            <div>
+              <div className="field-label">Имейл</div>
+              <input className="field-input active-field" defaultValue="ivelina@" readOnly/>
+            </div>
+            <div>
+              <div className="field-label">В кой град си?</div>
+              <div className="country-grid">
+                {countries.map(c => (
+                  <div key={c.code} className={`country-option ${country === c.code ? 'selected' : ''}`} onClick={() => setCountry(c.code)}>
+                    <span className="country-flag">{c.flag}</span>
+                    <span>{c.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="keyboard-hint">⌨️ Продължи с клавиатурата</div>
+        <div className="form-footer">
+          <button className="next-btn">Напред →</button>
+          <div className="step-dots">
+            {[0,1,2,3].map(i => <div key={i} className={`step-dot ${i===0?'active-dot':''}`}/>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Screen 3: Phone Verify ────────────────────────────────────
+function ScreenVerify() {
+  const code = ['4','2','·','','',''];
+  return (
+    <div className="screen">
+      <div className="form-screen">
+        <div className="form-nav">
+          <button className="back-btn">‹</button>
+          <div className="form-progress">
+            <div className="progress-track"><div className="progress-fill" style={{width:'50%'}}/></div>
+            <div className="progress-label">2 / 4</div>
+          </div>
+        </div>
+        <div className="form-body">
+          <div className="form-title">Потвърди <em>телефона</em></div>
+          <div className="form-sub">Изпратихме SMS код на +359 88 *** ** 42</div>
+          <div>
+            <div className="phone-row" style={{marginBottom:12}}>
+              <div className="phone-prefix">🇧🇬 +359</div>
+              <input className="field-input filled" defaultValue="088 123 4242" readOnly style={{flex:1}}/>
+            </div>
+          </div>
+          <div>
+            <div className="field-label" style={{textAlign:'center', marginBottom:12}}>Въведи 6-цифрен код</div>
+            <div className="verify-digits">
+              {['4','2','·','','',''].map((d, i) => (
+                <div key={i} className={`digit-box ${d==='·'?'active-d':''} ${d&&d!=='·'?'filled-d':''}`}>{d==='·'?'':d}</div>
+              ))}
+            </div>
+            <div className="verify-resend">Не получи SMS? <span>Изпрати отново</span></div>
+          </div>
+        </div>
+        <div className="form-footer">
+          <button className="next-btn" disabled>Потвърди</button>
+          <div className="step-dots">
+            {[0,1,2,3].map(i => <div key={i} className={`step-dot ${i===1?'active-dot':''}`}/>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Screen 4: Profile ─────────────────────────────────────────
+function ScreenProfile() {
+  const [selected, setSelected] = React.useState(['tech', 'travel', 'food']);
+  const chips = [
+    {id:'tech', label:'Технологии'}, {id:'travel', label:'Пътувания'},
+    {id:'food', label:'Гастрономия'}, {id:'art', label:'Изкуство'},
+    {id:'biz', label:'Бизнес'}, {id:'music', label:'Музика'},
+    {id:'sport', label:'Спорт'}, {id:'nature', label:'Природа'},
+  ];
+  return (
+    <div className="screen">
+      <div className="form-screen">
+        <div className="form-nav">
+          <button className="back-btn">‹</button>
+          <div className="form-progress">
+            <div className="progress-track"><div className="progress-fill" style={{width:'75%'}}/></div>
+            <div className="progress-label">3 / 4</div>
+          </div>
+        </div>
+        <div className="form-body">
+          <div className="form-title">Твоят <em>профил</em></div>
+          <div className="avatar-picker">
+            <div className="avatar-circle">
+              ИП
+              <div className="avatar-edit-badge">✎</div>
+            </div>
+            <div className="avatar-hint">Добави снимка (по избор)</div>
+          </div>
+          <div>
+            <div className="field-label">Кратко за теб</div>
+            <input className="field-input filled" defaultValue="Маркетинг специалист, обичам да готвя" readOnly/>
+          </div>
+          <div>
+            <div className="field-label">Интереси (изберете 3+)</div>
+            <div className="interest-chips">
+              {chips.map(c => (
+                <div key={c.id} className={`interest-chip ${selected.includes(c.id)?'selected':''}`}
+                  onClick={() => setSelected(s => s.includes(c.id) ? s.filter(x=>x!==c.id) : [...s, c.id])}>
+                  {c.label}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="form-footer">
+          <button className="next-btn">Напред →</button>
+          <div className="step-dots">
+            {[0,1,2,3].map(i => <div key={i} className={`step-dot ${i===2?'active-dot':''}`}/>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Screen 5: Success + First Dinner ─────────────────────────
+function ScreenSuccess() {
+  return (
+    <div className="screen">
+      <div className="success-screen">
+        <div className="success-ring"><span className="success-check">✓</span></div>
+        <div className="success-title">Добре дошла,<br/><em>Ивелина!</em></div>
+        <div className="success-sub">Профилът е готов. Ето вечеря, която ти пасва:</div>
+        <div className="mini-event">
+          <div className="mini-event-date">Пет, 25 Апр · 19:30</div>
+          <div className="mini-event-name">Bulgarian Dinner at DOMO</div>
+          <div className="mini-event-meta">
+            <span>Sofia · 20 лв.</span>
+            <span className="mini-event-seats">⚡ 3 места</span>
+          </div>
+        </div>
+        <button className="next-btn" style={{width:'100%'}}>Резервирай място →</button>
+        <button className="next-btn dark" style={{width:'100%', marginTop:8}}>Разгледай всички вечери</button>
+      </div>
+    </div>
+  );
+}
+
+function Phone({ children }) {
+  return (
+    <div className="iphone">
+      <div className="iphone-screen">
+        <StatusBar/>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "showArrows": true
+}/*EDITMODE-END*/;
+
+const STEPS = [
+  { label: "01 — Splash",        screen: <ScreenSplash/> },
+  { label: "02 — Регистрация",   screen: <ScreenRegister/> },
+  { label: "03 — Верификация",   screen: <ScreenVerify/> },
+  { label: "04 — Профил",        screen: <ScreenProfile/> },
+  { label: "05 — Първа вечеря",  screen: <ScreenSuccess/> },
+];
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  return (
+    <>
+      <div className="canvas-label">Meet-BG · Mobile App</div>
+      <div className="canvas-title">Onboarding Flow</div>
+      <div className="frames-row">
+        {STEPS.map((s, i) => (
+          <React.Fragment key={i}>
+            {t.showArrows && i > 0 && <div className="arrow">›</div>}
+            <div className="frame-col">
+              <div className="frame-step-label">{s.label}</div>
+              <Phone>{s.screen}</Phone>
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
+      <TweaksPanel>
+        <TweakSection label="Опции"/>
+        <TweakToggle label="Покажи стрелки" value={t.showArrows} onChange={v => setTweak('showArrows', v)}/>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('app')).render(<App/>);
+</script>
+</body>
+</html>
