@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="bg"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+body { background: var(--color-cream); margin: 0; overflow: hidden; }
+.site-nav { position: relative; background: rgba(247,244,239,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--color-cream-dark); padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo svg { width: 32px; height: 32px; }
+.nav-wordmark { font-family: var(--font-display); font-size: 22px; font-weight: 500; color: var(--color-graphite); letter-spacing: -0.01em; }
+.nav-links { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+.nav-links a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--color-neutral-500); }
+.nav-links a.active { color: var(--color-graphite); border-bottom: 2px solid var(--color-gold); padding-bottom: 2px; }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-countries { display: flex; gap: 8px; }
+.nav-country { text-decoration: none; font-size: 12px; font-weight: 600; color: var(--color-neutral-400); padding: 4px 10px; border-radius: 99px; border: 1px solid var(--color-neutral-300); }
+.nav-cta { background: var(--color-graphite); color: white; padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
+@media (max-width: 720px) { .nav-links, .nav-countries { display: none; } .site-nav { padding: 0 16px; } }
+</style></head><body>
+<nav class="site-nav">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 64 64" fill="none">
+      <path d="M38.5 5.2 A28 28 0 1 1 25.5 5.2" stroke="#C9A24D" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M25 21 Q24 30 28.5 33.5 Q30 35.5 32 35.5 Q34 35.5 35.5 33.5 Q40 30 39 21 Z" stroke="#C9A24D" stroke-width="1.6" fill="none"/>
+      <line x1="32" y1="35.5" x2="32" y2="42" stroke="#C9A24D" stroke-width="1.6"/>
+      <line x1="27" y1="42" x2="37" y2="42" stroke="#C9A24D" stroke-width="1.6"/>
+      <circle cx="51.5" cy="18.5" r="2.6" fill="#C9A24D"/><circle cx="51.5" cy="45.5" r="2.6" fill="#C9A24D"/>
+      <circle cx="32" cy="58.5" r="2.6" fill="#C9A24D"/><circle cx="12.5" cy="45.5" r="2.6" fill="#C9A24D"/>
+      <circle cx="12.5" cy="18.5" r="2.6" fill="#C9A24D"/>
+    </svg>
+    <span class="nav-wordmark">meet-bg</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Вечери</a></li>
+    <li><a href="#">Как работи</a></li>
+    <li><a href="#">За нас</a></li>
+    <li><a href="#">Контакт</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-countries">
+      <a href="#" class="nav-country">🇬🇧 UK</a>
+      <a href="#" class="nav-country">🇩🇪 DE</a>
+      <a href="#" class="nav-country">🇺🇸 US</a>
+    </div>
+    <a href="#" class="nav-cta">Запиши се →</a>
+  </div>
+</nav>
+</body></html>

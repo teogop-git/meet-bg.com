@@ -1,0 +1,10 @@
+/* Gutenberg / Block Editor styles — match site typography */
+body {
+  font-family: 'Inter', sans-serif;
+  color: #1E1E1E;
+}
+h1, h2, h3, h4 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; }
+h1 { font-size: 48px; font-weight: 300; line-height: 1.1; }
+h2 { font-size: 32px; line-height: 1.2; }
+h3 { font-size: 24px; line-height: 1.3; }
+.wp-block { max-width: 720px; }

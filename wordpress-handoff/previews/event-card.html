@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="bg"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+body { margin: 0; background: var(--color-cream-dark); padding: 32px; }
+.label { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-gold-dark); margin-bottom: 20px; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.event-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-md); transition: transform 250ms ease, box-shadow 250ms ease; display: flex; flex-direction: column; }
+.event-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.event-img { height: 130px; display: flex; align-items: center; justify-content: center; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 500; }
+.event-img-sofia { background: linear-gradient(160deg, #1E1E1E 0%, #2B2B2B 100%); }
+.event-img-london { background: linear-gradient(160deg, #0D1B2A 0%, #1E2D3A 100%); }
+.event-img-munich { background: linear-gradient(160deg, #1A1A2E 0%, #16213E 100%); }
+.event-body { padding: 14px 16px; flex: 1; }
+.event-date { font-size: 10px; color: var(--color-gold-dark); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+.event-name { font-family: var(--font-display); font-size: 17px; font-weight: 500; color: var(--color-graphite); margin: 0 0 6px; line-height: 1.3; }
+.event-venue { font-size: 12px; color: var(--color-neutral-500); }
+.event-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.event-price { font-size: 13px; font-weight: 600; color: var(--color-graphite); }
+.event-seats { font-size: 11px; padding: 3px 9px; border-radius: 99px; font-weight: 600; }
+.seats-ok { background: #F0FDF4; color: #166534; }
+.seats-low { background: #FEF9C3; color: #854D0E; }
+.seats-full { background: #FEE2E2; color: #991B1B; }
+.event-cta { margin: 0 16px 14px; padding: 10px; background: var(--color-graphite); color: white; border-radius: 8px; font-size: 12px; font-weight: 600; text-align: center; cursor: pointer; }
+.event-cta.is-disabled { background: #9CA3AF; cursor: not-allowed; }
+@media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+</style></head><body>
+<div class="label">Event card · 3 състояния (OK / Low / Full)</div>
+<div class="grid">
+  <div class="event-card">
+    <div class="event-img event-img-london">📍 London, UK</div>
+    <div class="event-body">
+      <div class="event-date">Sat, 26 Apr · 20:00</div>
+      <h3 class="event-name">BG Dinner — Shoreditch</h3>
+      <div class="event-venue">Shoreditch · London</div>
+      <div class="event-foot"><span class="event-price">£18</span><span class="event-seats seats-ok">8 места</span></div>
+    </div>
+    <div class="event-cta">Book a Seat</div>
+  </div>
+  <div class="event-card">
+    <div class="event-img event-img-sofia">📍 Sofia, BG</div>
+    <div class="event-body">
+      <div class="event-date">Пет, 25 Апр · 19:30</div>
+      <h3 class="event-name">Bulgarian Dinner at DOMO</h3>
+      <div class="event-venue">DOMO · Sofia</div>
+      <div class="event-foot"><span class="event-price">€10</span><span class="event-seats seats-low">⚡ 3 места</span></div>
+    </div>
+    <div class="event-cta">Резервирай място</div>
+  </div>
+  <div class="event-card">
+    <div class="event-img event-img-munich">📍 Munich, DE</div>
+    <div class="event-body">
+      <div class="event-date">Thu, 1 May · 19:00</div>
+      <h3 class="event-name">Bulgarische Nacht — Mitte</h3>
+      <div class="event-venue">Mitte · Munich</div>
+      <div class="event-foot"><span class="event-price">€17</span><span class="event-seats seats-full">Пълна</span></div>
+    </div>
+    <div class="event-cta is-disabled">Запиши в листа</div>
+  </div>
+</div>
+</body></html>

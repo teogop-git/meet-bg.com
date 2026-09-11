@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="bg"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+body { margin: 0; background: var(--color-graphite); color: white; }
+.hero { padding: 60px 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; position: relative; overflow: hidden; }
+.hero::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 70% 50%, rgba(201,162,77,0.08) 0%, transparent 60%); pointer-events:none; }
+.hero > * { position: relative; z-index: 1; }
+.hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-gold); margin-bottom: 16px; }
+.hero-title { font-family: var(--font-display); font-size: 48px; font-weight: 300; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px; }
+.hero-title em { font-style: italic; color: var(--color-gold); }
+.hero-body { font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.7); margin-bottom: 28px; max-width: 440px; }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-hero-primary { background: var(--color-gold); color: var(--color-graphite); padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; }
+.btn-hero-outline { border: 1.5px solid rgba(255,255,255,0.3); color: white; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; }
+.hero-stats { display: flex; gap: 28px; margin-top: 36px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.1); }
+.stat-num { font-family: var(--font-display); font-size: 30px; font-weight: 500; color: var(--color-gold); }
+.stat-label { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 2px; }
+
+.hero-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; overflow: hidden; backdrop-filter: blur(10px); }
+.hero-card-img { height: 180px; background: linear-gradient(160deg, rgba(201,162,77,0.2) 0%, rgba(13,27,42,0.8) 100%); display: flex; align-items: center; justify-content: center; }
+.hero-card-img-text { font-family: var(--font-display); font-size: 14px; color: rgba(255,255,255,0.4); letter-spacing: 0.1em; }
+.hero-card-body { padding: 18px 22px; }
+.hero-card-date { font-size: 11px; color: var(--color-gold); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+.hero-card-title { font-family: var(--font-display); font-size: 20px; font-weight: 500; color: white; margin-bottom: 10px; }
+.hero-card-meta { display: flex; justify-content: space-between; align-items: center; }
+.hero-card-loc { font-size: 12px; color: rgba(255,255,255,0.5); }
+.hero-badge { background: rgba(244,122,32,0.2); color: #F47A20; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 99px; border: 1px solid rgba(244,122,32,0.3); }
+.hero-avatars { display: flex; padding: 0 22px 18px; align-items: center; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--color-graphite); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; margin-left: -6px; background: var(--color-gold); color: var(--color-graphite); }
+.avatar:first-child { margin-left: 0; }
+.avatar-count { background: #2A2A2A; color: rgba(255,255,255,0.7); }
+.avatars-text { font-size: 11px; color: rgba(255,255,255,0.4); margin-left: 10px; }
+@media (max-width: 720px) { .hero { grid-template-columns: 1fr; padding: 32px 20px; } .hero-title { font-size: 32px; } .hero-stats { flex-wrap: wrap; gap: 16px; } }
+</style></head><body>
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">Bulgarian Social Dining</div>
+    <h1 class="hero-title">Вечери, които<br><em>свързват хора.</em></h1>
+    <p class="hero-body">Среща с непознати около обща маса. Само с правилните. В твоя град — или навсякъде по света.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-hero-primary">Резервирай място</a>
+      <a href="#" class="btn-hero-outline">Как работи →</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num">4</div><div class="stat-label">Държави</div></div>
+      <div><div class="stat-num">12+</div><div class="stat-label">Града</div></div>
+      <div><div class="stat-num">850+</div><div class="stat-label">Вечери</div></div>
+      <div><div class="stat-num">6 200</div><div class="stat-label">Участника</div></div>
+    </div>
+  </div>
+  <div class="hero-card">
+    <div class="hero-card-img"><span class="hero-card-img-text">Тази петък · DOMO · Sofia</span></div>
+    <div class="hero-card-body">
+      <div class="hero-card-date">Пет, 25 Апр · 19:30</div>
+      <div class="hero-card-title">Bulgarska Vecher — DOMO</div>
+      <div class="hero-card-meta">
+        <span class="hero-card-loc">📍 Sofia · €10</span>
+        <span class="hero-badge">⚡ 3 места</span>
+      </div>
+    </div>
+    <div class="hero-avatars">
+      <div class="avatar">IP</div>
+      <div class="avatar">EG</div>
+      <div class="avatar" style="background:#4A9EFF;color:white">SD</div>
+      <div class="avatar avatar-count">+9</div>
+      <span class="avatars-text">вече се записали</span>
+    </div>
+  </div>
+</section>
+</body></html>

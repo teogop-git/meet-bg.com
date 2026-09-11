@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Badge" subtitle="Event status, verified identity, dinner count" viewport="700x220" -->
+<html lang="bg"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../../styles.css"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@400;500;600&display=swap">
+<style>*{box-sizing:border-box}body{margin:0;background:#F7F4EF;padding:24px 28px;font-family:var(--font-ui,Inter,system-ui,sans-serif)}.lbl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9CA3AF;margin-bottom:10px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}.row:last-child{margin-bottom:0}.dk{background:#0D0D0D;border-radius:10px;padding:16px 20px}</style>
+</head><body><div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script><script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script><script src="../../_ds_bundle.js"></script>
+<script>
+const h=React.createElement;
+const NS=window.MeetBGDesignSystem_b3a11a;
+function App(){
+  const B = NS.Badge;
+  return h('div',null,
+    h('div',{className:'lbl'},'Event Status'),
+    h('div',{className:'row'},
+      h(B,{tone:'green'},'Потвърдена'),
+      h(B,{tone:'yellow'},'3 места остават'),
+      h(B,{tone:'red'},'Пълна'),
+      h(B,{tone:'blue'},'Waitlist')),
+    h('div',{className:'lbl'},'Identity & History'),
+    h('div',{className:'row'},
+      h(B,{tone:'verified',check:true},'Verified'),
+      h(B,{tone:'count'},'7 вечери'),
+      h(B,{tone:'count',style:{background:'#1F1F1F'}},'3 вечери')));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(App());
+</script></body></html>

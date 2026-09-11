@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="bg"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+body { margin: 0; background: var(--color-cream); padding: 48px 40px; }
+.section-label { font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-gold-dark); margin-bottom: 12px; }
+.section-title { font-family: var(--font-display); font-size: 36px; font-weight: 500; color: var(--color-graphite); margin: 0 0 14px; }
+.section-body { font-size: 16px; color: var(--color-neutral-500); line-height: 1.7; max-width: 540px; margin-bottom: 40px; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.step-num { font-family: var(--font-display); font-size: 48px; font-weight: 300; color: var(--color-gold); line-height: 1; margin-bottom: 12px; }
+.step-title { font-family: var(--font-display); font-size: 22px; font-weight: 500; margin: 0 0 10px; color: var(--color-graphite); }
+.step-text { font-size: 14px; color: var(--color-neutral-500); line-height: 1.65; margin: 0; }
+@media (max-width: 720px) { .steps { grid-template-columns: 1fr; gap: 24px; } body { padding: 32px 20px; } }
+</style></head><body>
+<div class="section-label">Как работи</div>
+<h2 class="section-title">Три стъпки до нова вечеря</h2>
+<p class="section-body">Без сложности. Избираш вечеря, заплащаш такса, пристигаш. Всичко останало е осигурено.</p>
+<div class="steps">
+  <div><div class="step-num">01</div><h3 class="step-title">Избери вечеря</h3><p class="step-text">Разглеждай предстоящи вечери в твоя град — или в UK, DE, US. Виж ресторанта, датата и свободните места.</p></div>
+  <div><div class="step-num">02</div><h3 class="step-title">Запиши се</h3><p class="step-text">Регистрирай се с истинско име и потвърди телефон. Заплати таксата онлайн сигурно чрез Stripe.</p></div>
+  <div><div class="step-num">03</div><h3 class="step-title">Пристигни &amp; свържи се</h3><p class="step-text">Нашият координатор те посреща. Маса за 10–12 души. Реален разговор. Нови приятели.</p></div>
+</div>
+</body></html>

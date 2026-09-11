@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="bg"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+body { margin: 0; background: #111; padding: 36px 32px 24px; }
+.top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.brand-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.brand-logo svg { width: 26px; height: 26px; }
+.brand-name { font-family: var(--font-display); font-size: 17px; color: white; font-weight: 500; }
+.brand-desc { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.7; max-width: 240px; }
+.col h4 { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin: 0 0 12px; }
+.col a { display: block; font-size: 12px; color: rgba(255,255,255,0.5); text-decoration: none; margin-bottom: 7px; }
+.bot { display: flex; justify-content: space-between; align-items: center; padding-top: 18px; }
+.copy { font-size: 11px; color: rgba(255,255,255,0.25); }
+.legal { display: flex; gap: 18px; }
+.legal a { font-size: 11px; color: rgba(255,255,255,0.25); text-decoration: none; }
+@media (max-width: 720px) { .top { grid-template-columns: 1fr; gap: 20px; } .bot { flex-direction: column; gap: 10px; } }
+</style></head><body>
+<div class="top">
+  <div>
+    <div class="brand-logo">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path d="M38.5 5.2 A28 28 0 1 1 25.5 5.2" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M25 21 Q24 30 28.5 33.5 Q30 35.5 32 35.5 Q34 35.5 35.5 33.5 Q40 30 39 21 Z" stroke="white" stroke-width="1.6" fill="none"/>
+        <line x1="32" y1="35.5" x2="32" y2="42" stroke="white" stroke-width="1.6"/>
+        <line x1="27" y1="42" x2="37" y2="42" stroke="white" stroke-width="1.6"/>
+        <circle cx="51.5" cy="18.5" r="2.6" fill="white"/><circle cx="51.5" cy="45.5" r="2.6" fill="white"/>
+        <circle cx="32" cy="58.5" r="2.6" fill="white"/><circle cx="12.5" cy="45.5" r="2.6" fill="white"/>
+        <circle cx="12.5" cy="18.5" r="2.6" fill="white"/>
+      </svg>
+      <span class="brand-name">meet-bg</span>
+    </div>
+    <p class="brand-desc">Платформа за социални вечери за българите по света. Реални хора. Реални срещи.</p>
+  </div>
+  <div class="col"><h4>Платформа</h4><a href="#">Вечери</a><a href="#">Как работи</a><a href="#">Координатори</a><a href="#">Ресторанти</a></div>
+  <div class="col"><h4>Страни</h4><a href="#">meet-bg.uk</a><a href="#">meet-bg.de</a><a href="#">meet-bg.us</a><a href="#">app.meet-bg.com</a></div>
+  <div class="col"><h4>Компания</h4><a href="#">За нас</a><a href="#">Контакт</a><a href="#">GDPR</a><a href="#">Условия</a></div>
+</div>
+<div class="bot">
+  <div class="copy">© 2025 Meet-BG. Всички права запазени.</div>
+  <div class="legal"><a href="#">Поверителност</a><a href="#">Условия</a><a href="#">Бисквитки</a></div>
+</div>
+</body></html>
